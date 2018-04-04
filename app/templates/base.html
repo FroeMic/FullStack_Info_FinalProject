@@ -1,0 +1,92 @@
+<html>
+  <head>
+
+    {% if title %}
+    <title>{{ title }}</title>
+    {% else %}
+    <title>Travel App</title>
+    {% endif %}
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='_css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='_css/now-ui-kit-cool-jewel-tones.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='_css/style.css') }}">
+
+  </head>
+  <body class="cloak sidebar-collapse">
+
+    <!-- Navbar -->
+      <nav class="navbar navbar-expand-lg bg-white">
+          <div class="container">
+              <div class="navbar-translate">
+                  <a class="navbar-brand" href="{{ url_for('index') }}">
+                     App Name
+                 </a>
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-bar bar1"></span>
+                    <span class="navbar-toggler-bar bar2"></span>
+                    <span class="navbar-toggler-bar bar3"></span>
+                 </button>
+              </div>
+      
+          </div>
+      </nav>
+    <!-- Flash Messages -->
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        {% if category == 'info' or category == 'message' %}
+          <div class="alert alert-info" role="alert">
+        {% endif %}
+        {% if category == 'error' %}
+          <div class="alert alert-danger" role="alert">
+        {% endif %}
+            <div class="container">
+              <div class="alert-icon">
+                <i class="now-ui-icons travel_info"></i>
+              </div>
+              {{ message }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">
+                  <i class="now-ui-icons ui-1_simple-remove"></i>
+                </span>
+              </button>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Main Content -->
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+
+    <!-- jquery and bootstrap -->
+    <!-- Documentation: http://demos.creative-tim.com/now-ui-kit/documentation/tutorial-components.html -->
+    <script type="text/javascript" src="{{ url_for('static',filename='_js/jquery.3.2.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='_js/popper.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='_js/bootstrap.min.js') }}"></script>
+
+
+    <!-- jquery plugins -->
+    <!--  Plugin for Switches, full documentation here: http://www.jque.re/plugins/version3/bootstrap.switch/ -->
+    <script type="text/javascript" src="{{ url_for('static',filename='_js/plugins/bootstrap-switch.js') }}"></script>
+    <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
+    <script type="text/javascript" src="{{ url_for('static',filename='_js/plugins/nouislider.min.js') }}"></script>
+    <!--  Plugin for the DatePicker, full documentation here: https://github.com/uxsolutions/bootstrap-datepicker -->
+    <script type="text/javascript" src="{{ url_for('static',filename='_js/plugins/bootstrap-datepicker.js') }}"></script>
+    <!-- Share Library etc -->
+    <script type="text/javascript" src="{{ url_for('static',filename='_js/plugins/jquery.sharrre.js') }}"></script>
+
+    <!-- now-ui-kit setup -->
+    <!-- Control Center for Now Ui Kit: parallax effects, scripts for the example pages etc -->
+    <script type="text/javascript" src="{{ url_for('static',filename='_js/now-ui-kit.js') }}"></script>
+
+    <!-- customs js -->
+    <script type="text/javascript" src="{{ url_for('static',filename='_js/app.js') }}"></script>
+  </body>
+</html>
