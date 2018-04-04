@@ -7,7 +7,13 @@ To contribute select an issue from the [Project Board](https://github.com/FroeMi
 
 Be sure to follow the **Gitflow** (our branching model) while doing so. You can find a [Step-by-Step Guide](https://share.nuclino.com/p/GitFlow-How-To-Bf6rSHUFJdB7PUpgRi_uxU) on Nuclino. If still in doubt, just ask on Slack.
 
+## Initial Setup
 
+After **initially cloning** the repository make sure that
+
+1. All the dependecies in `requirements.txt` are installed. You can install them by running `pip install -r requirements.txt`.
+2. You created and configured the dotenv file (`.env`). Just copy and rename the `.env.example`.
+3. You created the database. In your terminal navigate to this folder and run `python` to bring up the python interactive shell. Then run the following three commands: `import app`, then `app._create_database()` and finally `exit()`.
 
 ## Folder Structure
 
