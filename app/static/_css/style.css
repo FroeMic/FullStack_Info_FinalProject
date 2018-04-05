@@ -1,3 +1,15 @@
+/* NAVBAR */
+/* Navbar */
+.sidebar-collapse .navbar-collapse:before  {
+    background: white;
+}
+
+.sidebar-collapse .navbar-collapse .navbar-nav:not(.navbar-logo) .nav-link:not(.btn) {
+    color: #2c2c2c;
+}
+
+
+/* REGISTER VIEW */
 .card-signup {
     max-width: unset;
     padding: 30px 0;

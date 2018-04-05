@@ -31,3 +31,7 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     return "TODO: Login route not implemented yet"
+
+@app.route('/logout')
+def logout():
+    return "TODO: Logout route not implemented yet"
