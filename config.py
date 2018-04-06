@@ -12,3 +12,5 @@ load_dotenv(dotenv_path=env_file_path)
 SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI')
 WTF_CSRF_ENABLED = os.getenv('WTF_CSRF_ENABLED') != 'False'
 SECRET_KEY = os.getenv('SECRET_KEY')
+PORT = int(os.getenv('PORT'))
+HOST = os.getenv('HOST')
