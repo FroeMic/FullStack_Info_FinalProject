@@ -53,5 +53,10 @@ def logout():
 # # =========================
 @app.route('/mybooks')
 @login_required
-def trips():
+def mybooks():
     return "TODO: Implement the /mybooks route"
+
+@app.route('/settings')
+@login_required
+def settings():
+    return "TODO: Implement the /settings route"
