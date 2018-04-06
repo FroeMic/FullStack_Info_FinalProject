@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block navlinks %}
+  {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-10 ml-auto mr-auto">
+        <div class="card card-signup">
+            <h2 class="card-title text-center">Register</h2>
+            <div class="text-center subtitle col-md-8 ml-auto mr-auto">
+                Join a community of passionate readers to discover the next books to fall in love it and enjoy exclusive member benefits.
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col d-none d-md-block">
+                        <div class="info">
+                            <h5 class="info-title">
+                                <i class="now-ui-icons users_single-02 text-primary"></i>
+                                Personalized Recommendations
+                            </h5>
+                            <p class="description">
+                                We will tailor our recommendations right to your taste in books.
+                            </p>
+                        </div>
+                        <div class="info">
+                            <h5 class="info-title">
+                                <i class="now-ui-icons location_bookmark text-primary"></i>
+                                Reading List
+                            </h5>
+                            <p class="description">
+                                Bookmark your favorite content and curate your personal reading list. 
+                            </p>
+                        </div>
+                        <div class="info">
+                            <h5 class="info-title">
+                                <i class="now-ui-icons emoticons_satisfied text-primary"></i>
+                                No Strings Attached
+                            </h5>
+                            <p class="description">
+                                Registration is completely free and comes with not strings attached. We will never give away any of the data you provide to 3rd parties. Pinky-promise!
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <form action="" method="post">
+                            {{ form.hidden_tag() }}
+                            <div class="form-group mb-0">
+                                {{ form.firstname.label }}
+                                {{ form.firstname(size=32) }}
+                                {% for error in form.firstname.errors %}
+                                <span class="text-danger">[{{ error }}]</span>
+                                {% endfor %}
+                            </div>
+                            <div class="form-group mb-0">
+                                {{ form.lastname.label }}
+                                {{ form.lastname(size=32) }}
+                                {% for error in form.lastname.errors %}
+                                <span class="text-danger">[{{ error }}]</span>
+                                {% endfor %}
+                            </div>
+                            <div class="form-group mb-0">
+                                {{ form.email.label }}
+                                {{ form.email(size=64) }}
+                                {% for error in form.email.errors %}
+                                <span class="text-danger">[{{ error }}]</span>
+                                {% endfor %}
+                            </div>
+                            <div class="form-group mb-0">
+                                {{ form.password.label }}
+                                {{ form.password(size=32) }}
+                                {% for error in form.password.errors %}
+                                <span class="text-danger">[{{ error }}]</span>
+                                {% endfor %}
+                            </div>
+                            <div class="form-group mb-0">
+                                {{ form.password2.label }}
+                                {{ form.password2(size=32) }}
+                                {% for error in form.password2.errors %}
+                                <span class="text-danger">[{{ error }}]</span>
+                                {% endfor %}
+                            </div>
+                            <div class="form-group mb-0">
+                                {{ form.submit() }}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+

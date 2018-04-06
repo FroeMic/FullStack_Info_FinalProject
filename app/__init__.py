@@ -1,11 +1,14 @@
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 
 app = Flask(__name__)
 app.config.from_object('config')
 db = SQLAlchemy(app)
 
-from app import routes, models
+login = LoginManager(app)
+
+from app import routes, models, forms, utils
 
 
 def _create_database():
