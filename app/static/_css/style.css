@@ -10,19 +10,29 @@
 
 
 /* REGISTER VIEW */
-.card-signup {
+.card-signup,
+.card-signin {
     max-width: unset;
     padding: 30px 0;
     margin-top: 20px;
 }
 
-.card-signup .subtitle {
+.card-signin {
+    width: 400px;
+}
+
+.card-signup .subtitle,
+.card-signin .subtitle {
     font-size: 12pt;
     font-weight: 300;
     margin-bottom: 40px;
 }
 
 .card-signup .card-body {
+    padding: .9375rem 1.875rem;
+}
+
+.card-signin .card-body {
     padding: .9375rem 1.875rem;
 }
 
@@ -33,14 +43,16 @@
     padding-right: 5%;
 }
 
-.card-signup label {
+.card-signup label,
+.card-signin label {
     font-size: 7pt;
     text-transform: uppercase;
     font-weight: 700;
     margin-bottom: 5px;
 }
 
-.card-signup input {
+.card-signup input,
+.card-signin input {
     margin-bottom: 10px;
 }
 

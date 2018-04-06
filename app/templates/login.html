@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block navlinks %}
+  {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class=" col-lg-10 ml-auto mr-auto text-center">
+        <div class="card card-signin text-left">
+            <h2 class="card-title text-center">Sign In</h2>
+            <div class="text-center subtitle col-md-8 ml-auto mr-auto">
+                Please log in to access your profile.
+            </div>
+            <div class="card-body">
+                <div>
+                    <form action="" method="post">
+                            {{ form.hidden_tag() }}
+                            <div class="form-group mb-0">
+                                {{ form.email.label }}
+                                {{ form.email(size=64) }}
+                                {% for error in form.email.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            <div class="form-group mb-0">
+                                {{ form.password.label }}
+                                {{ form.password(size=32) }}
+                                {% for error in form.password.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            <div class="form-group mb-0">
+                                {{ form.submit() }}
+                            </div>
+                        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+
