@@ -1,5 +1,4 @@
 /* NAVBAR */
-/* Navbar */
 .sidebar-collapse .navbar-collapse:before  {
     background: white;
 }
@@ -8,6 +7,16 @@
     color: #2c2c2c;
 }
 
+/* DROPDOWN */
+.dropdown-menu {
+    left: auto;
+    right: 0;
+}
+
+.dropdown-menu:before {
+    right: 10px;
+    left: auto;
+}
 
 /* REGISTER VIEW */
 .card-signup,
