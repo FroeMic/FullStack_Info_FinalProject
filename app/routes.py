@@ -1,5 +1,5 @@
 from flask import render_template, redirect, url_for, flash
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
 
 from app import app, db
 from app.forms import RegistrationForm, LoginForm
@@ -47,3 +47,11 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+# =========================
+# 2. Login Required
+# # =========================
+@app.route('/mybooks')
+@login_required
+def trips():
+    return "TODO: Implement the /mybooks route"
