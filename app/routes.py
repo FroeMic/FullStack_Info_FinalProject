@@ -56,7 +56,23 @@ def logout():
 def mybooks():
     return "TODO: Implement the /mybooks route"
 
+
 @app.route('/settings')
 @login_required
 def settings():
-    return "TODO: Implement the /settings route"
+    return redirect(url_for('settings_profile'))
+
+@app.route('/settings/profile')
+@login_required
+def settings_profile():
+    return render_template('settings_profile.html', title='Settings')
+
+@app.route('/settings/preferences')
+@login_required
+def settings_preferences():
+    return render_template('settings_preferences.html', title='Settings')
+
+@app.route('/settings/password')
+@login_required
+def settings_password():
+    return render_template('settings_password.html', title='Settings')
