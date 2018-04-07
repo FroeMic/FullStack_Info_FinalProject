@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, flash
 from flask_login import current_user, login_user, logout_user, login_required
 
 from app import app, db
-from app.forms import RegistrationForm, LoginForm, SettingsForm
+from app.forms import RegistrationForm, LoginForm, SettingsForm, PasswordForm
 from app.models import User
 
 
@@ -85,7 +85,17 @@ def settings_profile():
 def settings_preferences():
     return render_template('settings_preferences.html', title='Settings')
 
-@app.route('/settings/password')
+@app.route('/settings/password', methods=['GET', 'POST'])
 @login_required
 def settings_password():
-    return render_template('settings_password.html', title='Settings')
+    form = PasswordForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(id=int(current_user.id)).first()
+        if user is None:
+            flash('Error! We could not update your settings.', 'error')
+            return redirect(url_for('settings_profile'))
+
+        user.set_password(form.newpassword.data)
+        db.session.commit()
+        return redirect(url_for('settings_password'))
+    return render_template('settings_password.html', title='Settings', form=form)
