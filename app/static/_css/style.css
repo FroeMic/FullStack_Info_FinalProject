@@ -68,18 +68,6 @@ body>.navbar + * {
     padding-right: 5%;
 }
 
-.card-signup label,
-.card-signin label {
-    font-size: 7pt;
-    text-transform: uppercase;
-    font-weight: 700;
-    margin-bottom: 5px;
-}
-
-.card-signup input,
-.card-signin input {
-    margin-bottom: 10px;
-}
 
 .card-signup .info {
     padding-right: 10px;
@@ -92,6 +80,18 @@ body>.navbar + * {
 
 .card-signup .info p{
     color: #555;
+}
+
+/* FORM */
+.form label {
+    font-size: 7pt;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.form input {
+    margin-bottom: 10px;
 }
 
 /* SETTINGS */
