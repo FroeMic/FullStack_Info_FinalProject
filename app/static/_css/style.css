@@ -1,5 +1,20 @@
+/* ANIMATION */
+.cloak {
+    opacity: 0;
+}
+
+*:not(.cloak) {
+    opacity: 1;
+    transition: opacity .5s ease-in-out;
+    -moz-transition: opacity .5s ease-in-out;
+    -webkit-transition: opacity .5s ease-in-out;
+}
+
 /* NAVBAR */
-/* Navbar */
+body>.navbar + * {
+    margin-top: 82px;
+}
+
 .sidebar-collapse .navbar-collapse:before  {
     background: white;
 }
@@ -8,8 +23,18 @@
     color: #2c2c2c;
 }
 
+/* DROPDOWN */
+.dropdown-menu {
+    left: auto;
+    right: 0;
+}
 
-/* REGISTER VIEW */
+.dropdown-menu:before {
+    right: 10px;
+    left: auto;
+}
+
+/* REGISTER and LOGING VIEW */
 .card-signup,
 .card-signin {
     max-width: unset;
@@ -43,18 +68,6 @@
     padding-right: 5%;
 }
 
-.card-signup label,
-.card-signin label {
-    font-size: 7pt;
-    text-transform: uppercase;
-    font-weight: 700;
-    margin-bottom: 5px;
-}
-
-.card-signup input,
-.card-signin input {
-    margin-bottom: 10px;
-}
 
 .card-signup .info {
     padding-right: 10px;
@@ -67,4 +80,47 @@
 
 .card-signup .info p{
     color: #555;
+}
+
+/* FORM */
+.form label {
+    font-size: 7pt;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.form input {
+    margin-bottom: 10px;
+}
+
+/* SETTINGS */
+.fixed-section {
+    top: 90px;
+    max-height: 80vh;
+    overflow: scroll;
+    position: sticky;
+    width: min-content;
+}
+
+.fixed-section ul {
+    padding: 0;
+}
+
+.fixed-section ul li {
+    list-style: none;
+}
+
+.fixed-section li a {
+    padding-left: 2px;
+    display: block;
+}
+
+.fixed-section li a.active {
+    font-weight: 700;
+}
+
+.fixed-section,
+.settings-content {
+    padding-top: 30px;
 }

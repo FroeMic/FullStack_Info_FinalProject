@@ -1,0 +1,38 @@
+{% extends "base_settings.html" %}
+
+{% block navlinks %}
+  {{ super() }}
+{% endblock %}
+
+{% block settings_content %}
+    <h3>Update Your Profile</h3>
+    <div>
+        <form class="form" action="" method="post">
+                {{ form.hidden_tag() }}
+                <div class="form-group mb-0">
+                    {{ form.firstname.label }}
+                    {{ form.firstname(size=32) }}
+                    {% for error in form.firstname.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <div class="form-group mb-0">
+                    {{ form.lastname.label }}
+                    {{ form.lastname(size=32) }}
+                    {% for error in form.lastname.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <div class="form-group mb-0">
+                    {{ form.email.label }}
+                    {{ form.email(size=64) }}
+                    {% for error in form.email.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <div class="form-group mb-0">
+                    {{ form.submit() }}
+                </div>
+            </form>
+    </div>
+{% endblock %}
