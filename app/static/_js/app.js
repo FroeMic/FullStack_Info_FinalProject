@@ -68,7 +68,9 @@ function setupLandingPage() {
 		addExploreMoodsView();
 	});
 
-    $('#input-search').on('keyup', updateDropdownView); 
+	$('#input-search').on('keyup', updateDropdownView); 
+	
+	$('#exploreMoodsContainer').on('click', '.mood-btn', moodButtonClicked);
 
 	// setup autocomplete suggestion view
 	$('#autoCompleteContainer').on('mouseleave', '.autocomplete-suggestion', function (){
@@ -162,7 +164,7 @@ function addExploreMoodsView() {
 	let html = ['<h4>Explore Moods</h4>']
 	for (let mood of moods) {
 		html.push([
-			'<a href="" class="btn mood-btn">',
+			'<a href="" class="btn mood-btn" value="', mood.toLowerCase(),'">',
 				mood,
 			'</a>'
 		].join(''))
@@ -170,6 +172,16 @@ function addExploreMoodsView() {
 
 	$('#exploreMoodsContainer').empty()
 	$('#exploreMoodsContainer').append(html.join(''));
+}
+
+function moodButtonClicked(e) {
+	e.preventDefault();
+	const v = $(this).attr('value');
+	state.query = v;
+	state.selectedMood = v;
+	$('#input-search').val(v);
+	performQuery();
+
 }
 
 /**
