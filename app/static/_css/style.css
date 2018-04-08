@@ -34,6 +34,26 @@ body>.navbar + * {
     left: auto;
 }
 
+#searchInputDropDownMenu {
+    top: -2px !important;
+    border-top: 1px #888 solid;
+    border-radius: .3rem;
+}
+
+#searchInputDropDownMenu #exploreMoodsContainer .btn {
+    border: 1px #888 solid;
+    background-color: white;
+    color: #888;
+    text-transform: capitalize;
+    font-weight: 500;
+    margin-right: 10px
+}
+
+#searchInputDropDownMenu #exploreMoodsContainer h4 {
+    font-size: 14pt;
+    font-weight: 500;
+}
+
 /* LANDING PAGE */
 .landing-page {
     margin-top: -20px;
@@ -44,6 +64,10 @@ body>.navbar + * {
 .landing-page .page-header-image {
     background-image: url('/static/_assets/img/bg_books.jpg');
     transform: translate3d(0px, 0px, 0px);
+}
+
+.landing-page .page-header .container>.content-center {
+    top: 40%;
 }
 
 .input-group-lg .input-group-addon {
