@@ -34,6 +34,38 @@ body>.navbar + * {
     left: auto;
 }
 
+/* LANDING PAGE */
+.landing-page {
+    margin-top: -20px;
+}
+.landing-page .page-header {
+    max-height: 640px;
+}
+.landing-page .page-header-image {
+    background-image: url('/static/_assets/img/bg_books.jpg');
+    transform: translate3d(0px, 0px, 0px);
+}
+
+.input-group-lg .input-group-addon {
+    padding: 10px 18px 10px 18px;
+}
+
+.landing-page .input-group-lg input.form-control,
+.landing-page .input-group .input-group-addon,
+.landing-page .input-group-focus .input-group-addon {
+    border: none;
+    background-color: white;
+}
+
+.landing-page .dropdown-toggle:after,
+.landing-page .dropdown-menu:before {
+    display: none;
+}
+
+.landing-page .dropdown-menu.show {
+    width: calc(100% - 30px) !important;
+}
+
 /* REGISTER and LOGING VIEW */
 .card-signup,
 .card-signin {
