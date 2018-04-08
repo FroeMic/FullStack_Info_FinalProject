@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash
+from flask import render_template, redirect, url_for, flash, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
 
 from app import app, db
@@ -89,3 +89,16 @@ def settings_preferences():
 @login_required
 def settings_password():
     return render_template('settings_password.html', title='Settings')
+
+# =========================
+# 3. API
+# =========================
+
+@app.route('/api/v1/moods')
+def moods():
+    moods = [
+        'happy',
+        'breakup',
+        'sad'
+    ]
+    return jsonify(data = moods, success=True, error=None)
