@@ -10,6 +10,10 @@
     -webkit-transition: opacity .5s ease-in-out;
 }
 
+.hidden {
+    display: none !important;
+}
+
 /* NAVBAR */
 body>.navbar + * {
     margin-top: 82px;
@@ -88,6 +92,19 @@ body>.navbar + * {
 
 .landing-page .dropdown-menu.show {
     width: calc(100% - 30px) !important;
+}
+
+#autoCompleteContainer .autocomplete-suggestion {
+    cursor: pointer;
+    text-transform: capitalize;
+    line-height: 25pt;
+    font-size: 12pt;
+    margin-right: 30px;
+    padding: 0 10px;
+}
+
+#autoCompleteContainer .autocomplete-suggestion.selected {
+    background-color: #D1F8FE;
 }
 
 /* REGISTER and LOGING VIEW */
