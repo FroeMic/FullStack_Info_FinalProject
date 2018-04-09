@@ -97,8 +97,8 @@ def settings_password():
         if not user.check_password(form.currentpassword.data):
             flash('Error! Your current password appears to be incorrect.', 'error')
             return redirect(url_for('settings_password'))
-
         user.set_password(form.newpassword.data)
         db.session.commit()
+        flash('Your password was updated!', 'info')
         return redirect(url_for('settings_password'))
     return render_template('settings_password.html', title='Settings', form=form)
