@@ -62,7 +62,7 @@ def search():
         }),
     ]
 
-    return render_template('search.html', results=results, rating_to_stars=rating_to_stars)
+    return render_template('search.html', results=results, rating_to_stars=rating_to_stars, mood=mood)
 
 
 @app.route('/register', methods=['GET', 'POST'])
