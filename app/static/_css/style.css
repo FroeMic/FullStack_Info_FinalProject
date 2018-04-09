@@ -107,6 +107,65 @@ body>.navbar + * {
     background-color: #D1F8FE;
 }
 
+/* SEARCH PAGE */
+#search-view .search-result {
+    cursor: pointer;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+#search-view .search-result .img-container {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    width: 100%;
+    margin-bottom: 5px;
+    border-radius: .2rem;
+}
+
+#search-view .search-result img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+#search-view .search-result .img-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+#search-view .search-result .score {
+    font-weight: 500;
+}
+
+#search-view .search-result .book-title {
+    font-weight: 500;
+    font-size: 16pt;
+}
+
+#search-view .search-result .author {
+    font-weight: 400;
+}
+
+#search-view .search-result .rating {
+    font-size: 10pt;
+}
+
+.hover-zoom {
+    -moz-transition:all 0.4s;
+    -webkit-transition:all 0.4s;
+     transition:all 0.4s
+ }
+.hover-zoom:hover {
+    -moz-transform: scale(1.08);
+    -webkit-transform: scale(1.08);
+     transform: scale(1.08)
+ }
+
+
 /* REGISTER and LOGING VIEW */
 .card-signup,
 .card-signin {
@@ -140,7 +199,6 @@ body>.navbar + * {
 .card-signup .card-body .col:nth-of-type(2) {
     padding-right: 5%;
 }
-
 
 .card-signup .info {
     padding-right: 10px;

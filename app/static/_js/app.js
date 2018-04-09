@@ -65,11 +65,16 @@ function setupLandingPage() {
 	}
 
 	loadMoods().then(function() {
+		const exampleMood = getRandom(state.moods, 1)[0];
+		if (exampleMood) {
+			$('#input-search').attr('placeholder', 'Try "' + exampleMood + '"');
+		}
 		addExploreMoodsView();
 	});
 
 	$('#input-search').on('keyup', updateDropdownView); 
-	
+	$('#input-search-button').on('click', performQuery); 
+
 	$('#exploreMoodsContainer').on('click', '.mood-btn', moodButtonClicked);
 
 	// setup autocomplete suggestion view
@@ -164,7 +169,7 @@ function addExploreMoodsView() {
 	let html = ['<h4>Explore Moods</h4>']
 	for (let mood of moods) {
 		html.push([
-			'<a href="" class="btn mood-btn" value="', mood.toLowerCase(),'">',
+			'<a href="#" class="btn mood-btn" value="', mood.toLowerCase(),'">',
 				mood,
 			'</a>'
 		].join(''))
@@ -189,6 +194,15 @@ function moodButtonClicked(e) {
  */
 function performQuery() {
 	console.log('TODO: performQuery')
+	if (!state.selectedMood) {
+		window.location.reload();
+		return;
+	} else {
+		let selectedMood = $('#input-search').val() ? $('#input-search').val() : state.selectedMood;
+		window.location = '/search?' + encodeQueryData({
+			'mood': selectedMood
+		});
+	}
 }
 
 /**
@@ -286,3 +300,14 @@ function getRandom(arr, n) {
     }
     return result;
 }
+
+/**
+ * Encodes a dictionary with {'key': 'value'} pairs of 
+ * type string into a query string for url parameters.
+ */
+function encodeQueryData(data) {
+	let ret = [];
+	for (let d in data)
+	  ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
+	return ret.join('&');
+ }
