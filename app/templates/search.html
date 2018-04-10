@@ -11,7 +11,9 @@
         {% for result in results %}
             <div class="col col-sm-4 col-lg-3 search-result">
                 <div class="img-container">
+                    <a href="{{ url_for('show_book', book_id=result.id)}}">
                     <img class="hover-zoom" src="{{result.image_url}}" alt="">
+                    </a>
                     <div class="img-overlay">
                         <!-- We could put something over the image here -->
                     </div>
