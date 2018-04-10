@@ -64,6 +64,9 @@ def search():
 
     return render_template('search.html', results=results, rating_to_stars=rating_to_stars, mood=mood)
 
+@app.route('/book/<book_id>')
+def show_book(book_id):
+    return render_template('book_details.html', results=results, book_id=book_id)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
