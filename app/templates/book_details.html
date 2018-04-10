@@ -5,40 +5,27 @@
 {% endblock %}
 
 {% block content %}
-<div id="search-view">
-    <h4>Books to read when you feel  <em>{{mood}}</em> </h4>
-    <div class="row">
-        {% for result in results %}
-            <div class="col col-sm-4 col-lg-3 search-result">
-                <div class="img-container">
-                    <img class="hover-zoom" src="{{result.image_url}}" alt="">
-                    <div class="img-overlay">
-                        <!-- We could put something over the image here -->
+
+<div class="row">
+    <div class="col-lg-10 ml-auto mr-auto">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="info">
+                            <img src="https://images.gr-assets.com/books/1320562005l/4214.jpg" class="rounded float-left">
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <h3 class="card-title">Life of Pi</h3>
+                        <h6>by Yann Martel</h6>
+                        <p>3.86 ★ ★ ★ ☆ ☆</p>
+                        <p class="card-text">Life of Pi is a fantasy adventure novel by Yann Martel published in 2001. The protagonist, Piscine Molitor "Pi" Patel, a Tamil boy from Pondicherry, explores issues of spirituality and practicality from an early age. He survives 227 days after a shipwreck while stranded on a boat in the Pacific Ocean with a Bengal tiger named Richard Parker.</p>
+                        <a href="#" class="btn btn-primary">Buy This Book</a>
                     </div>
                 </div>
-                <div class="score text-success">
-                    Match: {{result.match * 100}} %
-                </div>
-
-                <div class="rating">
-                    {{result.rating}}
-                    {% for star in rating_to_stars(result.rating) %}
-                    <span>{{star}}</span>
-                    {% endfor %}
-                </div>
-
-                <div class="book-title">
-                    {{result.title}}
-                </div>
-
-                <div class="author">
-                    by {{result.author}}
-                </div>
-
-
-    
             </div>
-        {% endfor %}
+        </div>
     </div>
 </div>
 
