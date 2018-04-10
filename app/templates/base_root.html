@@ -1,0 +1,96 @@
+<html>
+  <head>
+
+    {% if title %}
+    <title>{{ title }}</title>
+    {% else %}
+    <title>Travel App</title>
+    {% endif %}
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='_css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='_css/now-ui-kit.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='_css/style.css') }}">
+
+  </head>
+  <body class="cloak sidebar-collapse">
+
+    <!-- Navbar -->
+      <nav class="navbar navbar-expand-lg fixed-top bg-white">
+          <div class="container">
+              <div class="navbar-translate">
+                  <a class="navbar-brand" href="{{ url_for('index') }}">
+                     App Name
+                 </a>
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-bar bar1"></span>
+                    <span class="navbar-toggler-bar bar2"></span>
+                    <span class="navbar-toggler-bar bar3"></span>
+                 </button>
+              </div>
+
+              <div class="collapse navbar-collapse justify-content-end" id="navigation">
+                  <ul class="navbar-nav">
+                      {% block navlinks %}
+                        {% if current_user.is_anonymous %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('login') }}">Sign In</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('register') }}">Sign Up</a>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a href="{{ url_for('mybooks') }}" class="nav-link">
+                                    <i class="now-ui-icons location_bookmark"></i>
+                                    My Books
+                            </a>
+                    </li>
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbarDropdownUser">
+                                    <i class="now-ui-icons users_single-02"></i>
+                                    Hello, {{current_user.firstname}}
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownUser">
+                                    <a class="dropdown-item text-dark" href="{{ url_for('settings') }}">Settings</a>
+                                    <a class="dropdown-item text-dark" href="{{ url_for('logout') }}">Logout</a>
+                                </ul>
+                        </li>
+                        {% endif %}
+                      {% endblock %}
+                  </ul>
+              </div>
+
+          </div>
+      </nav>
+
+      <main>
+          {% block main_body %}{% endblock %}
+      </main>
+
+
+    <!-- jquery and bootstrap -->
+    <!-- Documentation: http://demos.creative-tim.com/now-ui-kit/documentation/tutorial-components.html -->
+    <script type="text/javascript" src="{{ url_for('static',filename='_js/jquery.3.2.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='_js/popper.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='_js/bootstrap.min.js') }}"></script>
+
+
+    <!-- jquery plugins -->
+    <!--  Plugin for Switches, full documentation here: http://www.jque.re/plugins/version3/bootstrap.switch/ -->
+    <script type="text/javascript" src="{{ url_for('static',filename='_js/plugins/bootstrap-switch.js') }}"></script>
+    <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
+    <script type="text/javascript" src="{{ url_for('static',filename='_js/plugins/nouislider.min.js') }}"></script>
+    <!--  Plugin for the DatePicker, full documentation here: https://github.com/uxsolutions/bootstrap-datepicker -->
+    <script type="text/javascript" src="{{ url_for('static',filename='_js/plugins/bootstrap-datepicker.js') }}"></script>
+    <!-- Share Library etc -->
+    <script type="text/javascript" src="{{ url_for('static',filename='_js/plugins/jquery.sharrre.js') }}"></script>
+    
+    <!-- now-ui-kit setup -->
+    <!-- Control Center for Now Ui Kit: parallax effects, scripts for the example pages etc -->
+    <script type="text/javascript" src="{{ url_for('static',filename='_js/now-ui-kit.js') }}"></script>
+
+    <!-- customs js -->
+    <script type="text/javascript" src="{{ url_for('static',filename='_js/app.js') }}"></script>
+  </body>
+</html>

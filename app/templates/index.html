@@ -1,11 +1,47 @@
-{% extends "base.html" %}
+{% extends "base_root.html" %}
 
 {% block navlinks %}
   {{ super() }}
 {% endblock %}
 
-{% block content %}
-  <div>
-    <h1>Hello World</h1>
+{% block main_body %}
+  <div id="landing-page" class="landing-page">
+      <div class="page-header">
+          <div class="page-header-image" data-parallax="false">
+          </div>
+          <div class="container">
+              <div class="content-center text-left">
+                  <h2 class="title text-white">Find excellent books which fit your current mood.</h2>
+                  <div class="input-group input-group-lg dropdown-toggle"  data-toggle="dropdown" id="searchInputDropDown">
+                      <span class="input-group-addon">
+                          <i class="now-ui-icons ui-1_zoom-bold"></i>
+                      </span>
+                      <input id="input-search" type="text" class="form-control bg-white" placeholder="Try 'breakup'">
+                      <span class="input-group-addon">
+                         <a id="input-search-button" class="btn btn-primary text-white">
+                          Search
+                         </a>
+                      </span>
+                  </div>
+                  <div class="dropdown-menu" aria-labelledby="searchInputDropDown" id="searchInputDropDownMenu"> 
+                    <div id="exploreMoodsContainer" class="container text-left m-3">
+                        <!-- moods injected by js -->
+                    </div>
+                    <div id="autoCompleteContainer" class="container text-left m-3 hidden">
+                        <!-- suggestions injected by js -->
+                    </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <!-- dummy -->
+  <div class="section">
+      <div class="container">
+          <div class="row">
+            <div class="col" style="background: red; height: 2000px;"></div>
+          </div>
+      </div>
   </div>
 {% endblock %}
