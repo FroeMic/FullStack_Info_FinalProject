@@ -13,7 +13,7 @@ from app.utils import dict_to_object, rating_to_stars
 
 @app.route('/')
 def index():
-    return render_template('index.html', title='App Name')
+    return render_template('index.html', title='Literapy')
 
 @app.route('/search')
 def search():
