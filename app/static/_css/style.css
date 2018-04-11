@@ -255,3 +255,23 @@ body>.navbar + * {
 .settings-content {
     padding-top: 30px;
 }
+
+/* READING LIST */
+#readinglist .img-container {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+    width: 100%;
+    margin-bottom: 5px;
+    border-radius: .2rem;
+}
+
+#readinglist h4 {
+    padding: 0;
+    margin: 0;
+    font-weight: bold;
+}
+
+#readinglist h2 {
+    margin-top: 100px;
+}

@@ -107,7 +107,7 @@ def logout():
 @app.route('/mybooks')
 @login_required
 def mybooks():
-    return "TODO: Implement the /mybooks route"
+    return render_template('reading_list.html')
 
 @app.route('/settings')
 @login_required
