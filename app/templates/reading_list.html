@@ -1,65 +1,61 @@
 {% extends "base_root.html" %}
 
 {% block navlinks %}
-  {{ super() }}
+{{ super() }}
 {% endblock %}
 
 {% block main_body %}
 
 <div class="container">
-<div id="readinglist">
-    <div class="col-lg-10 ml-auto mr-auto">
-    	<h2 class="text-left title text-black">Your Book List</h2>
-        <div class="thumbnail">
-        	<div class ="row">
-        		<div class ="col-2">
-        			<div class="img-container">
-            			<img class="rounded float-left" src="https://images-na.ssl-images-amazon.com/images/I/51HTxer-rdL._SY346_.jpg" alt="" />
-            		</div>
-            	</div>
-	            <div class="col-10">
-	                <h4>The Hundred Year Flood</h4>
-	                <p>Matthew Salesses</p>
-	                <p>3.3 ★ ★ ★ ☆ ☆</p>
-                	<a class="btn btn-primary text-white" href="#">See Book Details</a>
-                    <a class="btn btn-primary text-white" href="#">Remove from List</a>
-	            </div>
-            </div>
-        </div>
-        <div class="thumbnail">
-        	<div class ="row">
-        		<div class ="col-2">
-        			<div class="img-container">
-            			<img class="rounded float-left" src="https://images-na.ssl-images-amazon.com/images/I/61O-ltKJb9L._SX330_BO1,204,203,200_.jpg" alt="" />
-            		</div>
-            	</div>
-	            <div class="col-10">
-	                <h4>One Hundred Years of Solitude</h4>
-	                <p>Gabriel Garcia Marquez</p>
-	                <p>4.0 ★ ★ ★ ★ ☆</p>
-                	<a class="btn btn-primary text-white" href="#">See Book Details</a>
-                    <a class="btn btn-primary text-white" href="#">Remove from List</a>
-	            </div>
-            </div>
-        </div>
-        <div class="thumbnail">
-        	<div class ="row">
-        		<div class ="col-2">
-        			<div class="img-container">
-            			<img class="rounded float-left" src="https://images-na.ssl-images-amazon.com/images/I/51Z0nLAfLmL._SY346_.jpg" alt="" />
-            		</div>
-            	</div>
-	            <div class="col-10">
-	                <h4>The Alchemist</h4>
-	                <p>Paulo Coelho</p>
-	                <p>4.5 ★ ★ ★ ★ ☆</p>
-                	<a class="btn btn-primary text-white" href="#">See Book Details</a>
-                    <a class="btn btn-primary text-white" href="#">Remove from List</a>
-	            </div>
-            </div>
-        </div>
-    </div>
-</div>
+	<div id="readinglist">
+		<div class="col-lg-10 ml-auto mr-auto">
+			<h2 class="title text-black">Your Book List</h2>
+			<div class ="row">
+				<div class ="col-2">
+					<div class="img-container">
+						<img class="rounded float-left" src="https://images-na.ssl-images-amazon.com/images/I/51HTxer-rdL._SY346_.jpg" alt="" />
+					</div>
+				</div>
+				<div class="col-10">
+					<h4>The Hundred Year Flood</h4>
+					<p>Matthew Salesses</p>
+					<p>3.3 ★ ★ ★ ☆ ☆</p>
+					<a class="btn btn-primary" href="#">See Book Details</a>
+					<a class="btn btn-primary" href="#">Remove from List</a>
+				</div>
+			</div>
+
+			<div class ="row">
+				<div class ="col-2">
+					<div class="img-container">
+						<img class="rounded float-left" src="https://images-na.ssl-images-amazon.com/images/I/61O-ltKJb9L._SX330_BO1,204,203,200_.jpg" alt="" />
+					</div>
+				</div>
+				<div class="col-10">
+					<h4>One Hundred Years of Solitude</h4>
+					<p>Gabriel Garcia Marquez</p>
+					<p>4.0 ★ ★ ★ ★ ☆</p>
+					<a class="btn btn-primary" href="#">See Book Details</a>
+					<a class="btn btn-primary" href="#">Remove from List</a>
+				</div>
+			</div>
+
+			<div class ="row">
+				<div class ="col-2">
+					<div class="img-container">
+						<img class="rounded float-left" src="https://images-na.ssl-images-amazon.com/images/I/51Z0nLAfLmL._SY346_.jpg" alt="" />
+					</div>
+				</div>
+				<div class="col-10">
+					<h4>The Alchemist</h4>
+					<p>Paulo Coelho</p>
+					<p>4.5 ★ ★ ★ ★ ☆</p>
+					<a class="btn btn-primary" href="#">See Book Details</a>
+					<a class="btn btn-primary" href="#">Remove from List</a>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 {% endblock %}
