@@ -5,3 +5,5 @@ from .genre import *
 from .book_genre import *
 from .mood import *
 from .book_mood import *
+from .review import *
+from .review_mood import *
