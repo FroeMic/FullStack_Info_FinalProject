@@ -60,13 +60,32 @@ def log_info(str):
 
 
 # ===========
+# Subroutines
+# ===========
+def database_exists():
+    ''' Returns whether the DB_PATH points to a valid file '''
+    return os.path.exists(DB_PATH) and os.path.isfile(DB_PATH)
+
+def input_file_exists():
+    ''' Returns whether the INPUT_FILE points to a valid file '''
+    return os.path.exists(INPUT_FILE) and os.path.isfile(INPUT_FILE)
+
+# ===========
 # Main routines
 # ===========
 def run():
     ''' Runs the import with current configuration'''
     # 1. Check wheter database exists
-    # 2. Check whether required table exist (books, mood, book_mood)
-    # 3. Check whether import file exist
+    if not database_exists():
+        log_error('Error: Could not locate database at "' + DB_PATH +'"')
+        exit(2)
+
+    # 2. Check whether import file exist
+    if not input_file_exists():
+        log_error('Error: Could not locate the input file at "' + INPUT_FILE +'"')
+        exit(2)
+
+    # 3. Check whether required table exist (books, mood, book_mood)
     # 4. Check whether all required columns exist (isbn, isbn13, mood1 ... mood n)
         # 4.1 Print log statement
         # Importing x moods
