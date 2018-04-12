@@ -18,3 +18,6 @@ class Book(db.Model):
 
     genres = db.relationship('Genre', secondary='book_genre', lazy='subquery',
         backref=db.backref('books', lazy=True))
+
+    moods = db.relationship('Mood', secondary='book_mood', lazy='subquery',
+        backref=db.backref('books', lazy=True))

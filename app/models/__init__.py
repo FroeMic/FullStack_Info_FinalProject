@@ -3,3 +3,5 @@ from .book import *
 from .bookmark import *
 from .genre import *
 from .book_genre import *
+from .mood import *
+from .book_mood import *
