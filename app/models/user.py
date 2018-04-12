@@ -29,4 +29,3 @@ class User(UserMixin, db.Model):
 
     def fullName(self):
         return self.firstname + ' ' + self.lastname
-
