@@ -1,6 +1,5 @@
 from app import db
 from datetime import datetime
-from app.models import User
 
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -16,3 +15,6 @@ class Book(db.Model):
     amazon_url = db.Column(db.String(256), index=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    genres = db.relationship('Genre', secondary='book_genre', lazy='subquery',
+        backref=db.backref('books', lazy=True))
