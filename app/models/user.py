@@ -14,9 +14,10 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(128), nullable=False)
     firstname = db.Column(db.String(128), nullable=False)
     lastname = db.Column(db.String(128), nullable=False)
+    is_admin = db.Column(db.Boolean, nullable=False, default=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
-
+    
     def set_password(self, password):
         self.password = generate_password_hash(password)
 
@@ -28,4 +29,3 @@ class User(UserMixin, db.Model):
 
     def fullName(self):
         return self.firstname + ' ' + self.lastname
-
