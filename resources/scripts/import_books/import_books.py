@@ -2,7 +2,12 @@ import sys
 import os
 import getopt
 import termcolor
+
+from datetime import datetime
+
+import sqlite3 as sql
 import pandas as pd
+import numpy as np
 
 
 # CONFIG
@@ -18,6 +23,9 @@ DB_BOOK_MOOD_TABLE = 'book_mood'
 DB_ISBN_COLUMN = 'isbn'
 DB_ISBN13_COLUMN = 'isbn13'
 DB_MOOD_COLUMN = 'title'
+DB_PIVOT_MOOD_ID_COLUMN = 'mood_id'
+DB_PIVOT_BOOK_ID_COLUMN = 'book_id'
+DB_PIVOT_SCORE_COLUMN = 'score'
 
 INPUT_ISBN_COLUMN = 'isbn'
 INPUT_ISBN13_COLUMN = 'isbn13'
@@ -52,7 +60,7 @@ def parse_arguments():
 def print_usage_and_exit():
     ''' Prints a short message on how to use the cli interface '''
     log_error('Usage: ' + sys.argv[0] + ' -d <db_path> -i <input_file_path>')
-    sys.exit(2)
+    fatal_error()
 
 def log_error(str):
     ''' Prints a string in red color '''
@@ -62,10 +70,115 @@ def log_warning(str):
     ''' Prints a string in yellow color '''
     print(termcolor.colored(str, 'yellow'))
 
-
 def log_info(str):
-    ''' Prints a string in blue color '''
-    print(termcolor.colored(str, 'blue'))
+    ''' Prints a string in white color '''
+    print(termcolor.colored(str, 'white'))
+
+def fatal_error():
+    ''' Exits the program. '''
+    sys.exit(2)
+
+# ===========
+# DB Helpers
+# ===========
+def check_whether_table_exists(tablename):
+    ''' Checks whether the specified table exists. '''
+    query = '''
+        SELECT COUNT(*)
+        FROM sqlite_master
+        WHERE name = ? AND type = 'table';
+    '''
+
+    with sql.connect(DB_PATH) as con: 
+        cur = con.cursor()
+        cur.execute(query, [tablename])
+        return cur.fetchone()[0] == 1
+
+    return False
+
+def get_last_row_id(con):
+    ''' Returns the id of the last row inserted into the database. '''
+    return con.execute('SELECT last_insert_rowid()').fetchone()[0]
+
+def insert_or_replace_mood(mood_title):
+    ''' Inserts mood_title into the database and returns its row id.'''
+
+    subquery = '''
+        SELECT `id` FROM `{}` WHERE `{}`= "{}"
+    '''.format(DB_MOOD_TABLE, DB_MOOD_COLUMN, mood_title)
+
+    query = '''
+        INSERT OR REPLACE INTO `{}` (`id`, `{}`, `created_at`, `updated_at`)  
+        VALUES (({}), ?,?,?)
+    '''.format(DB_MOOD_TABLE, DB_MOOD_COLUMN, subquery)
+
+    with sql.connect(DB_PATH) as con: 
+        con.execute(query, [
+            mood_title,
+            datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
+            datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+        ])
+        con.commit()
+
+        id = get_last_row_id(con)
+        return id
+        
+    return None
+
+def insert_or_replace_book(isbn, isbn13):
+    ''' Inserts a book into the database and returns its id. '''
+
+    isbn = str(isbn).zfill(10)
+    isbn13 = str(isbn13).zfill(13)
+    
+    subquery = '''
+        SELECT `id` FROM `{}` WHERE `{}`= "{}"
+    '''.format(DB_BOOK_TABLE, DB_ISBN13_COLUMN, isbn13)
+
+    query = '''
+        INSERT OR REPLACE INTO `{}` (`id`, `{}`, `{}`, `created_at`, `updated_at`)  
+        VALUES (({}), ?,?,?,?)
+    '''.format(DB_BOOK_TABLE, DB_ISBN_COLUMN, DB_ISBN13_COLUMN, subquery)
+
+    with sql.connect(DB_PATH) as con: 
+        con.execute(query, [
+            isbn,
+            isbn13,
+            datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
+            datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+        ])
+        con.commit()
+
+        id = get_last_row_id(con)
+        return id
+        
+    return None
+
+def insert_or_replace_book_mood_score(book_id, mood_id, score):
+    ''' Inserts or replaces a score for a mood, book tuple '''
+    subquery = '''
+        SELECT `id` FROM `{}` WHERE `{}`= {} AND `{}`= {}
+    '''.format(DB_BOOK_MOOD_TABLE, DB_PIVOT_MOOD_ID_COLUMN, mood_id, DB_PIVOT_BOOK_ID_COLUMN, book_id, )
+
+    query = '''
+        INSERT OR REPLACE INTO `{}` (`id`, `{}`, `{}`, `{}`, `created_at`, `updated_at`)  
+        VALUES (({}), ?,?,?,?,?)
+    '''.format(DB_BOOK_MOOD_TABLE, DB_PIVOT_BOOK_ID_COLUMN, DB_PIVOT_MOOD_ID_COLUMN, DB_PIVOT_SCORE_COLUMN, subquery)
+
+    with sql.connect(DB_PATH) as con: 
+        con.execute(query, [
+            book_id,
+            mood_id,
+            score,
+            datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
+            datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+        ])
+        con.commit()
+
+        id = get_last_row_id(con)
+        return id
+        
+    return None
 
 
 # ===========
@@ -90,10 +203,16 @@ def drop_ignored_columns(df):
 
 def check_whether_required_columns_exist(df):
     '''Check whether all required columns exist'''
+    fatal = False
     if not INPUT_ISBN_COLUMN:
         log_error('Required column "' + INPUT_ISBN_COLUMN + '" is missing in the input file.')
+        fatal = True
     if not INPUT_ISBN13_COLUMN:
         log_error('Required column "' + INPUT_ISBN13_COLUMN + '" is missing in the input file.')
+        fatal = True
+
+    if fatal:
+        fatal_error()
 
 def drop_duplicate_rows(df):
     ''' Removes duplicate rows based on INPUT_ISBN_COLUMN and INPUT_ISBN13_COLUMN columns '''
@@ -108,6 +227,52 @@ def get_mood_labels(df):
     ''' Returns a dictionary of all moods that should be inserted into the db. ''' 
     not_mood_columns = [INPUT_ISBN13_COLUMN, INPUT_ISBN_COLUMN] + INPUT_IGNORE_COLUMNS
     return [{'mood_title': col, 'id': None} for col in df.columns if col not in not_mood_columns]
+
+def check_whether_required_tables_exist():
+    ''' Checks whether the required tables exit in the database ''' 
+    tables = [
+        DB_BOOK_TABLE,
+        DB_MOOD_TABLE,
+        DB_BOOK_MOOD_TABLE
+    ]
+
+    for table in tables:
+        fatal = False
+        if not check_whether_table_exists(table):
+            log_error('Table "' + table + '" does not exist in database.')
+            fatal = True
+        
+    if fatal:
+        fatal_error()
+
+def add_moods_to_database(moods):
+    ''' Adds the an array of [{mood_title: String, id: Any}] to 
+    the database and return the sam array with filled in ids'''
+    result = []
+    for mood in moods:
+        id = insert_or_replace_mood(mood['mood_title'])
+        if id is not None:
+            mood['id'] = id
+            result.append(mood)
+        else:
+            log_warning('Could not insert mood "' + mood['mood_title'] + '"')
+    return result
+
+def add_book_to_database(isbn, isbn13, mood_scores):
+    ''' Adds the isbn and isbn13 to the db and then all [(mood_id, score)] into the DB_BOOK_MOOD_TABLE table '''
+    book_id = insert_or_replace_book(isbn, isbn13)
+    if book_id is None:
+        log_error('Could not insert book "' + str(isbn13).zfill(13) + '"')
+    else:
+        for (mood_id, score) in mood_scores:
+            insert_or_replace_book_mood_score(book_id, mood_id, score)
+            
+    
+def add_books_to_database(df, moods):
+    ''' Adds all books in the dataframe and all moods to the db '''
+    for index, row in df.iterrows():
+        mood_scores_for_book = [(mood['id'], row[mood['mood_title']]) for mood in moods if not np.isnan(row[mood['mood_title']]) ]
+        add_book_to_database(row[INPUT_ISBN_COLUMN], row[INPUT_ISBN13_COLUMN], mood_scores_for_book)
 
 # ===========
 # Main routines
@@ -125,11 +290,6 @@ def run():
         exit(2)
 
     # 3. Check whether all required columns exist (isbn, isbn13, mood1 ... mood n)
-        # 4.1 Print log statement
-        # Importing x moods
-        # Importing x books
-        # Skipping x books due to missing isbn or isbn13 values.
-
     log_info('Analyzing input file ...')
     df = load_input_file()
     df = drop_ignored_columns(df)
@@ -140,30 +300,21 @@ def run():
     log_info('\t-> Found ' + str(len(moods)) + ' moods to import.')
     log_info('\t-> Found ' + str(len(df)) + ' books to import.')
 
-    # print(moods)
-    # print(df.head())
-    # print(df.columns)
-
+     # 4. Check whether required tables exist (books, mood, book_mood)
     log_info('Checking database connection ...')
+    check_whether_required_tables_exist()
+    log_info('\t-> Database seems to be OK')
 
-    # 4. Check whether required tables exist (books, mood, book_mood)
-    # 5. Check which moods exist in the database by getting their ids
-        # 5.1 Print log statement
-        # xx moods exits in db already ... skipping
-    # 6. Add missing moods and retrieve their ids
-        # 6.1 Print log statement
-        # Imported xx moods
-    # 7. Check which books exist (isbn) in the database and get their ids
-        # 7.1 Print log statement
-        # xx books exits in db already ... skipping
-    # 8. Add missing books and retrieve their ids
-        # 8.1 Print log statement
-        # Imported xx books
-    # 9. Insert or Replace mood_id, book_id, score (see https://stackoverflow.com/questions/3634984/insert-if-not-exists-else-update)
-        # 8.1 Print log statement
-        # Added xx book_mood scores
+    # 5. Add moods to database and fill in their ids.
+    log_info('Adding moods to database ...')
+    moods =  add_moods_to_database(moods)
+    log_info('\t-> Inserted ' + str(len(moods)) + ' moods into the database.')
 
-   
+    # 5. Add the books and the (mood_id, book_id, score) tuples to the database.
+    log_info('Adding books to database ...')
+    add_books_to_database(df, moods)
+    log_info('\t-> Inserted ' + str(len(df)) + ' books with scores.')
+
 
 if __name__ == '__main__':
     # 1. Read Config variables
