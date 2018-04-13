@@ -76,6 +76,7 @@ def log_info(str):
 
 def fatal_error():
     ''' Exits the program. '''
+    log_error('FATAL ERROR! Import Failed.')
     sys.exit(2)
 
 # ===========
