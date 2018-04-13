@@ -9,6 +9,7 @@ class Book(db.Model):
     author = db.Column(db.String(128), index=False)
     price = db.Column(db.Float, index=False)
     rating = db.Column(db.Float, index=False)
+    description = db.Column(db.Text, index=False)
     cover_image_url = db.Column(db.String(256), index=False)
     goodreads_url = db.Column(db.String(256), index=False)
     goodreads_author_url = db.Column(db.String(256), index=False)
