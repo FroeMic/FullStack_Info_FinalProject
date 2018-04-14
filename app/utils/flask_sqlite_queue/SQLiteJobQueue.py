@@ -119,7 +119,6 @@ class SQLiteJobQueue(object):
             _schedule_job(con, self.table, job_dump, date_string)
 
     def run_due_jobs(self):
-        print('Current Workers ::', len(self._worker_threads))
         self._load_due_jobs()
         self._spawn_worker_threads()
 
@@ -144,7 +143,6 @@ class SQLiteJobQueue(object):
             if not thread.is_alive():
                 ids_to_remove.append(key)
         
-        print('Remove {} dead threads'.format(len(ids_to_remove)))
         for key in ids_to_remove:
             self._worker_threads.pop(key)
 
@@ -169,7 +167,6 @@ class SQLiteJobQueue(object):
 
         with _get_con(self.path) as con:
             _start_job(con, self.table, job.id)
-            print('running job')
             job.run()
             _finish_job(con, self.table, job.id)
 
