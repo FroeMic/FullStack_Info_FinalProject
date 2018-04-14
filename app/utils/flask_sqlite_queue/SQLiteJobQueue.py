@@ -101,6 +101,10 @@ class SQLiteJobQueue(object):
             # create database if necessary
             _create_database(con, self.table)
 
+    def run(self, job):
+        ''' Runs a job in th next cycle '''
+        self.delay(job, 0)
+
     def delay(self, job, seconds):
         ''' Takes a SQLiteJob and runs it after seconds '''
         deadline = datetime.datetime.utcnow() + datetime.timedelta(seconds=seconds)
