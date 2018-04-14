@@ -20,8 +20,10 @@ from app.utils.flask_sqlite_queue import Job, create_queue, configure_scheduler
 configure_scheduler(cycle_interval=1.0)
 queue = create_queue(app.config['JOB_QUEUE_DATABASE_URI'])
 
+from app import routes, models, forms, utils, tasks
 
-from app import routes, models, forms, utils
+goodreadsjob = tasks.SyncBooksWithGoodReadsJob()
+queue.run(goodreadsjob)
 
 
 def _create_database():
