@@ -2,6 +2,8 @@ from app.utils.flask_sqlite_queue import Job
 from app import app, queue, db
 from app.models import Book
 
+from datetime import datetime, timedelta
+
 from urllib.request import urlopen
 from urllib.parse import urlencode
 from urllib.error import HTTPError, URLError
@@ -9,16 +11,22 @@ from xml.etree import ElementTree
 
 class SyncBooksWithGoodReadsJob(Job):
     
-    def __init__(self):
+    def __init__(self, repeat = True):
         Job.__init__(self)
+        self.repeat = repeat
     
     def run(self):
+        if self.repeat:
+            self._schedule_next_run()
         for book in Book.query.all():
             self._sync_book_with_goodreads(book)
 
-        # queue.delay(self, 5)
+    def _schedule_next_run(self):
+        today = datetime.today()
+        tomorrow = today + timedelta(days=1)
+        tomorrow_1_am = datetime(tomorrow.year, tomorrow.month, tomorrow.day, hour = 1, tzinfo = None )
 
-
+        queue.schedule(self, tomorrow_1_am)
 
     def _sync_book_with_goodreads(self, book):
         book_id = self._get_id_for_isbn(book.isbn13)
