@@ -1,9 +1,10 @@
 from app.utils.flask_sqlite_queue import Job
-from app import app, queue
+from app import app, queue, db
 from app.models import Book
 
 from urllib.request import urlopen
 from urllib.parse import urlencode
+from urllib.error import HTTPError, URLError
 from xml.etree import ElementTree
 
 class SyncBooksWithGoodReadsJob(Job):
@@ -12,27 +13,47 @@ class SyncBooksWithGoodReadsJob(Job):
         Job.__init__(self)
     
     def run(self):
-        print('START SyncBooksWithGoodReadsJob Job')
-        # req = urllib2.Request('http://www.voidspace.org.uk')
-        # response = urllib2.urlopen(req)
-        # the_page = response.read()
+        for book in Book.query.all():
+            self._sync_book_with_goodreads(book)
+
         # queue.delay(self, 5)
-        book_id = self._get_id_for_isbn('9780692625477')
+
+
+
+    def _sync_book_with_goodreads(self, book):
+        book_id = self._get_id_for_isbn(book.isbn13)
+
+        if book_id is None:
+            return
+
         book_data = self._get_book_data(book_id)
+
+        if book_data is None:
+            return
+
         decoded_book_data = self._parse_XML(book_data)
-        print(book_id)
+        
+        book.title = decoded_book_data['title']
+        book.author = decoded_book_data['author']
+        book.rating = decoded_book_data['rating']
+        book.description = decoded_book_data['description']
+        book.cover_image_url = decoded_book_data['cover_image_url']
+        book.goodreads_url = decoded_book_data['goodreads_url']
+        book.goodreads_author_url = decoded_book_data['goodreads_author_url']
+
+        db.session.commit()
     
     def _get_id_for_isbn(self, isbn):
         url = self._get_isbn_to_id_endpoint(isbn)
         try:
             response = urlopen(url)
-        except urllib.error.HTTPError as e:
+        except HTTPError as e:
             # Return code error (e.g. 404, 501, ...
-            print('HTTPError: {}'.format(e.code))
+            print('HTTPError: {}'.format(e.code), '<' + url + '>')
             return None
-        except urllib.error.URLError as e:
+        except URLError as e:
             # Not an HTTP-specific error (e.g. connection refused)
-            print('URLError: {}'.format(e.reason))
+            print('URLError: {}'.format(e.reason), '<' + url + '>')
             return None
         else:
             # 200
@@ -42,13 +63,13 @@ class SyncBooksWithGoodReadsJob(Job):
         url = self._get_book_data_endpoint(id)
         try:
             response = urlopen(url)
-        except urllib.error.HTTPError as e:
+        except HTTPError as e:
             # Return code error (e.g. 404, 501, ...
-            print('HTTPError: {}'.format(e.code))
+            print('HTTPError: {}'.format(e.code), '<' + url + '>')
             return None
-        except urllib.error.URLError as e:
+        except URLError as e:
             # Not an HTTP-specific error (e.g. connection refused)
-            print('URLError: {}'.format(e.reason))
+            print('URLError: {}'.format(e.reason), '<' + url + '>')
             return None
         else:
             # 200
@@ -78,8 +99,13 @@ class SyncBooksWithGoodReadsJob(Job):
 
     def _parse_XML(self, raw_xml_response):
         tree = ElementTree.fromstring(raw_xml_response)
-        # root = tree.getroot()
-        # for child in tree[1]:
-        #     print(child.tag, child.attrib)
         book = tree[1]
-        print(book.find('title').text)
+        return {
+            'title': book.find('title').text,
+            'author': book.find('authors')[0].find('name').text,
+            'rating': float(book.find('average_rating').text),
+            'description': book.find('description').text,
+            'cover_image_url': book.find('image_url').text,
+            'goodreads_url':  book.find('link').text,
+            'goodreads_author_url': book.find('authors')[0].find('link').text,
+        }
