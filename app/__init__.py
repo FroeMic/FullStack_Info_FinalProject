@@ -17,7 +17,7 @@ from app.utils.flask_sqlite_queue import Job, create_queue, configure_scheduler
 # Be sure to disable this flag for production deployment.
 # app.run(debug=True, host=app.config['HOST'], port=app.config['PORT'], use_reloader=True)
 
-configure_scheduler(cycle_interval=1.0)
+configure_scheduler(cycle_interval=30.0) #scheduler checks every 30 seconds
 queue = create_queue(app.config['JOB_QUEUE_DATABASE_URI'])
 
 from app import routes, models, forms, utils, tasks
