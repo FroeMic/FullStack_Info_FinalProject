@@ -23,7 +23,8 @@ queue = create_queue(app.config['JOB_QUEUE_DATABASE_URI'])
 from app import routes, models, forms, utils, tasks
 
 goodreadsjob = tasks.SyncBooksWithGoodReadsJob()
-queue.run(goodreadsjob)
+goodreadsjob.run()
+# queue.run(goodreadsjob)
 
 
 def _create_database():

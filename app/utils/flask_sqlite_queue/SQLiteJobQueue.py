@@ -131,15 +131,16 @@ class SQLiteJobQueue(object):
             thread.exit()
 
     def _load_due_jobs(self):
-        queue = []
-        with _get_con(self.path) as con:
-           queue = _get_due_jobs(con, self.table)
+        with self._job_lock:
+            queue = []
+            with _get_con(self.path) as con:
+                queue = _get_due_jobs(con, self.table)
 
-        for (id, job_dump) in queue:
-            job = pickle.loads(job_dump)
-            job.id = id
-
-            self._due_jobs.append(job)
+            self._due_jobs = []
+            for (id, job_dump) in queue:
+                job = pickle.loads(job_dump)
+                job.id = id
+                self._due_jobs.append(job)
 
     def _spawn_worker_threads(self):
         ids_to_remove = []
