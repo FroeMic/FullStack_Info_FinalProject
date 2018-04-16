@@ -1,6 +1,6 @@
 from app.utils.flask_sqlite_queue import Job
 from app import app, queue, db
-from app.models import Book
+from app.models import Book, Genre
 
 from datetime import datetime, timedelta
 
@@ -40,6 +40,16 @@ class SyncBooksWithGoodReadsJob(Job):
             return
 
         decoded_book_data = self._parse_XML(book_data)
+
+        # make sure all genres exit in our database bevor adding them to the book
+        genres = []
+        for genre_title in decoded_book_data['genres']:
+            genre = Genre.query.filter_by(title=genre_title).first()
+            if genre is None:
+                genre = Genre(genre_title)
+                db.session.add(genre)
+                db.session.commit()
+            genres.append(genre)
         
         book.title = decoded_book_data['title']
         book.author = decoded_book_data['author']
@@ -49,6 +59,8 @@ class SyncBooksWithGoodReadsJob(Job):
         book.goodreads_url = decoded_book_data['goodreads_url']
         book.goodreads_author_url = decoded_book_data['goodreads_author_url']
 
+        book.genres = genres
+        
         db.session.commit()
     
     def _get_id_for_isbn(self, isbn):
@@ -116,4 +128,5 @@ class SyncBooksWithGoodReadsJob(Job):
             'cover_image_url': book.find('image_url').text,
             'goodreads_url':  book.find('link').text,
             'goodreads_author_url': book.find('authors')[0].find('link').text,
+            'genres': [shelf.attrib['name'] for shelf in book.find('popular_shelves')[:5]]
         }
