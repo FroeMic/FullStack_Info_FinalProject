@@ -27,7 +27,3 @@ def remove_queue(queue):
 def configure_scheduler(cycle_interval = 10):
     '''configures the scheduler'''
     get_scheduler().interval = cycle_interval
-
-def stop_all():
-    '''stops the scheduler'''
-    get_scheduler().stop(immediate = True)

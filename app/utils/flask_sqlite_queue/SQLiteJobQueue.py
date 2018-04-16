@@ -126,10 +126,6 @@ class SQLiteJobQueue(object):
         self._load_due_jobs()
         self._spawn_worker_threads()
 
-    def abort_running_jobs(self):
-        for key, thread in self._worker_threads.items():
-            thread.exit()
-
     def _load_due_jobs(self):
         with self._job_lock:
             queue = []
@@ -156,6 +152,7 @@ class SQLiteJobQueue(object):
         if create_new_threads > 0:
             for i in range(0,create_new_threads):
                 t = threading.Thread(target=self._run_job)
+                t.daemon = True
                 t.start()
                 self._worker_threads[id(t)] = t
         

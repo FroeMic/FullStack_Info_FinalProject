@@ -23,17 +23,6 @@ class Scheduler(object):
     def is_running():
         ''' Returns whether the scheduler is currently running '''
         return self._running
-        
-    def stop(self, immediate = False):
-        ''' Stops the Scheduler '''
-        if self._thread:
-            self._thread.exit()
-            self._thread = None
-        self._running = False
-
-        if immediate:
-            for key, queue in self._queues.items():
-                queue.abort_running_jobs()       
 
     def start(self):
         ''' Starts the Scheduler if not started yet '''
@@ -43,9 +32,11 @@ class Scheduler(object):
         elif self._thread and not self._thread.is_alive():
             self._thread.exit()
             self._thread = Thread(target=self._watch)
+            self._thread.daemon = True
             self._thread.start()
         else:
             self._thread = Thread(target=self._cycle)
+            self._thread.daemon = True
             self._thread.start()
         
     def register(self, queue):
