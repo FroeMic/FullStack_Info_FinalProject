@@ -22,6 +22,7 @@ After **initially cloning** the repository make sure that
 |— .env                 (store environment variables that should not end up on github)
 |— config.py            (loads variables from .env)
 |— run.py               (runs the flask server)
+|— resources/           (resources related to the development)
 |— app/                     
     |— data/            (user generated data. Not pushed to github.)
     |— forms/           (all forms)
@@ -30,6 +31,5 @@ After **initially cloning** the repository make sure that
     |— templates/       (Jinja2 templates)
     |— utils/           (additional functions such as custom decorators)
     |— __init__.py      
-    |— routes.py        (the routes of our app (formerly views.py) )
-
+    |— routes.py        (the routes of our app (formerly views.py) )  
 ```
