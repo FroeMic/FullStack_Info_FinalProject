@@ -38,9 +38,10 @@ def parse_arguments():
     ''' Parses the command line arguments and fills the config variables '''
     global DB_PATH
     global INPUT_FILE
+    global INPUT_FILE_SEPERATOR
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:],"hd:i:s:",["help", "seperator"])
+        opts, args = getopt.getopt(sys.argv[1:],"hd:i:s:",["help"])
     except getopt.GetoptError:
         print_usage_and_exit()
 
@@ -48,11 +49,11 @@ def parse_arguments():
         if opt in ('-h', '--help'):
             print_usage_and_exit()
         elif opt in ('-d'):
-             DB_PATH = arg
+            DB_PATH = arg
         elif opt in ('-i'):
-             INPUT_FILE = arg
-        elif opt in ('-s', '--seperator'):
-             INPUT_FILE_SEPERATOR = arg
+            INPUT_FILE = arg
+        elif opt in ('-s'):
+            INPUT_FILE_SEPERATOR = arg
 
     if not all([DB_PATH, INPUT_FILE]):
         print_usage_and_exit()
@@ -272,8 +273,21 @@ def add_book_to_database(isbn, isbn13, mood_scores):
 def add_books_to_database(df, moods):
     ''' Adds all books in the dataframe and all moods to the db '''
     for index, row in df.iterrows():
-        mood_scores_for_book = [(mood['id'], row[mood['mood_title']]) for mood in moods if not np.isnan(row[mood['mood_title']]) ]
+        mood_scores_for_book = [(mood['id'], row[mood['mood_title']]) for mood in moods if not is_empty(row[mood['mood_title']]) ]
         add_book_to_database(row[INPUT_ISBN_COLUMN], row[INPUT_ISBN13_COLUMN], mood_scores_for_book)
+
+def is_empty(value):
+    ''' Returns whether a cell is empty (true) or contains a valid score (false) '''
+    x = value
+    return (x is None) or (x == '') or (is_float(x) and float(x) == 0.0) or (is_float(x) and np.isnan(float(x)))
+    
+def is_float(value):
+    ''' Checks whether a value can be casted to a float '''
+    try:
+        float(value)
+        return True
+    except:
+        return False
 
 # ===========
 # Main routines

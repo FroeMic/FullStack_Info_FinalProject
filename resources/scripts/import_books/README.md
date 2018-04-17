@@ -6,7 +6,7 @@ In both cases make sure that the database schema is set up according to the conf
 **1. CLI Usage**
 
 ```
-python import_books.py -d ../../../app/data/app.db -i ./book_import_example.csv --seperator ';'
+python import_books.py -d ../../../app/data/app.db -i ./book_import_example.csv -s ';'
 ```
 
 **2.  Python Interative Shell**
