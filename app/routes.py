@@ -3,7 +3,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 
 from app import app, db
 from app.forms import RegistrationForm, LoginForm, SettingsForm, PasswordForm
-from app.models import User
+from app.models import User, Mood
 from app.utils import dict_to_object, rating_to_stars
 
 
@@ -162,42 +162,5 @@ def settings_password():
 
 @app.route('/api/v1/moods')
 def moods():
-    moods = [
-        'happy',
-        'loved',
-        'breakup',
-        'heartbroken',
-        'sad',
-        'crazy',
-        'excited',
-        'thankful',
-        'proud',
-        'relaxed',
-        'awesome',
-        'positive',
-        'negative',
-        'emotional',
-        'amused',
-        'empty',
-        'ill',
-        'restless',
-        'curious',
-        'alone',
-        'depressed',
-        'tired',
-        'entertained',
-        'pained',
-        'nervous',
-        'worried',
-        'pumped',
-        'optimistic',
-        'joyful',
-        'motivated',
-        'exhausted',
-        'nostalgic',
-        'in love',
-        'lonely',
-        'hurt'
-    ]
+    moods = [mood.title for mood in Mood.query.all()]
     return jsonify(data = moods, success=True, error=None)
-    
