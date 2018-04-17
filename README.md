@@ -28,6 +28,7 @@ After **initially cloning** the repository make sure that
     |— forms/           (all forms)
     |— models/          (all SQLAlchemy models)
     |— static/          (static files i.e. css, js, images)
+    |- tasks/           (asynchronous background jobs)
     |— templates/       (Jinja2 templates)
     |— utils/           (additional functions such as custom decorators)
     |— __init__.py      

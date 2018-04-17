@@ -1,0 +1,4 @@
+
+
+class NotAJobTypeWarning(RuntimeWarning):
+    pass

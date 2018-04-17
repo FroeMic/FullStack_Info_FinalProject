@@ -38,9 +38,10 @@ def parse_arguments():
     ''' Parses the command line arguments and fills the config variables '''
     global DB_PATH
     global INPUT_FILE
+    global INPUT_FILE_SEPERATOR
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:],"hd:i:s:",["help", "seperator"])
+        opts, args = getopt.getopt(sys.argv[1:],"hd:i:s:",["help"])
     except getopt.GetoptError:
         print_usage_and_exit()
 
@@ -48,11 +49,11 @@ def parse_arguments():
         if opt in ('-h', '--help'):
             print_usage_and_exit()
         elif opt in ('-d'):
-             DB_PATH = arg
+            DB_PATH = arg
         elif opt in ('-i'):
-             INPUT_FILE = arg
-        elif opt in ('-s', '--seperator'):
-             INPUT_FILE_SEPERATOR = arg
+            INPUT_FILE = arg
+        elif opt in ('-s'):
+            INPUT_FILE_SEPERATOR = arg
 
     if not all([DB_PATH, INPUT_FILE]):
         print_usage_and_exit()
@@ -129,8 +130,8 @@ def insert_or_replace_mood(mood_title):
 def insert_or_replace_book(isbn, isbn13):
     ''' Inserts a book into the database and returns its id. '''
 
-    isbn = str(isbn).zfill(10)
-    isbn13 = str(isbn13).zfill(13)
+    _isbn = str(isbn).split('.')[0].zfill(10)
+    _isbn13 = str(isbn13).split('.')[0].zfill(13)
     
     subquery = '''
         SELECT `id` FROM `{}` WHERE `{}`= "{}"
@@ -143,8 +144,8 @@ def insert_or_replace_book(isbn, isbn13):
 
     with sql.connect(DB_PATH) as con: 
         con.execute(query, [
-            isbn,
-            isbn13,
+            _isbn,
+            _isbn13,
             datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
             datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
         ])
@@ -214,6 +215,11 @@ def check_whether_required_columns_exist(df):
 
     if fatal:
         fatal_error()
+        
+def drop_empty_rows(df):
+    ''' Removes empty rows based on INPUT_ISBN_COLUMN and INPUT_ISBN13_COLUMN columns '''
+    df_non_empty = df.dropna(subset = [INPUT_ISBN_COLUMN, INPUT_ISBN13_COLUMN], how = 'any')
+    return df_non_empty
 
 def drop_duplicate_rows(df):
     ''' Removes duplicate rows based on INPUT_ISBN_COLUMN and INPUT_ISBN13_COLUMN columns '''
@@ -261,6 +267,10 @@ def add_moods_to_database(moods):
 
 def add_book_to_database(isbn, isbn13, mood_scores):
     ''' Adds the isbn and isbn13 to the db and then all [(mood_id, score)] into the DB_BOOK_MOOD_TABLE table '''
+    if ((is_float(isbn) and np.isnan(float(isbn))) or (is_float(isbn) and np.isnan(float(isbn)))):
+        log_warning('Skipping invalid isbn ({},{}).'.format(isbn, isbn13))
+        return
+        
     book_id = insert_or_replace_book(isbn, isbn13)
     if book_id is None:
         log_error('Could not insert book "' + str(isbn13).zfill(13) + '"')
@@ -268,12 +278,24 @@ def add_book_to_database(isbn, isbn13, mood_scores):
         for (mood_id, score) in mood_scores:
             insert_or_replace_book_mood_score(book_id, mood_id, score)
             
-    
 def add_books_to_database(df, moods):
     ''' Adds all books in the dataframe and all moods to the db '''
     for index, row in df.iterrows():
-        mood_scores_for_book = [(mood['id'], row[mood['mood_title']]) for mood in moods if not np.isnan(row[mood['mood_title']]) ]
+        mood_scores_for_book = [(mood['id'], row[mood['mood_title']]) for mood in moods if not is_empty(row[mood['mood_title']]) ]
         add_book_to_database(row[INPUT_ISBN_COLUMN], row[INPUT_ISBN13_COLUMN], mood_scores_for_book)
+
+def is_empty(value):
+    ''' Returns whether a cell is empty (true) or contains a valid score (false) '''
+    x = value
+    return (x is None) or (x == '') or (is_float(x) and float(x) == 0.0) or (is_float(x) and np.isnan(float(x)))
+    
+def is_float(value):
+    ''' Checks whether a value can be casted to a float '''
+    try:
+        float(value)
+        return True
+    except:
+        return False
 
 # ===========
 # Main routines
@@ -295,6 +317,7 @@ def run():
     df = load_input_file()
     df = drop_ignored_columns(df)
     df = drop_duplicate_rows(df)
+    df = drop_empty_rows(df)
     check_whether_required_columns_exist(df)
     moods =  get_mood_labels(df)
     log_info('Input file looks good:')
