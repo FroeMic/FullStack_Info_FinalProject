@@ -6,35 +6,35 @@
 
 {% block content %}
 <div id="search-view">
-    <h4>Books to read when you feel  <em>{{mood}}</em> </h4>
+    <h4>Books that will help you with <em>{{moods | join(", ")}}</em> </h4>
     <div class="row">
         {% for result in results %}
             <div class="col col-sm-4 col-lg-3 search-result">
                 <div class="img-container">
-                    <a href="{{ url_for('show_book', book_id=result.id)}}">
-                    <img class="hover-zoom" src="{{result.image_url}}" alt="">
+                    <a href="{{ url_for('show_book', book_id=result.book.id)}}">
+                    <img class="hover-zoom" src="{{result.book.cover_image_url}}" alt="">
                     </a>
                     <div class="img-overlay">
                         <!-- We could put something over the image here -->
                     </div>
                 </div>
                 <div class="score text-success">
-                    Match: {{result.match * 100}} %
+                    Match: {{result.score * 100}} %
                 </div>
 
                 <div class="rating">
-                    {{result.rating}}
-                    {% for star in rating_to_stars(result.rating) %}
+                    {{result.book.rating}}
+                    {% for star in rating_to_stars(result.book.rating) %}
                     <span>{{star}}</span>
                     {% endfor %}
                 </div>
 
                 <div class="book-title">
-                    {{result.title}}
+                    {{result.book.title}}
                 </div>
 
                 <div class="author">
-                    by {{result.author}}
+                    by {{result.book.author}}
                 </div>
 
 
