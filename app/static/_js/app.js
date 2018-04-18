@@ -1,7 +1,8 @@
 let state = {
 	moods: [],
 	query: '',
-	selectedMood: null	
+	selectedMood: null,
+	isReloading: false
 }
 
 let config = {
@@ -18,6 +19,7 @@ $(document).ready(function(){
 function setup() {
 	markActiveLinks();
 	setupLandingPage();
+	setupSearchPage();
 }
 
 /**
@@ -73,7 +75,7 @@ function setupLandingPage() {
 	});
 
 	$('#input-search').on('keyup', updateDropdownView); 
-	$('#input-search-button').on('click', performQuery); 
+	$('#input-search-button').on('click', triggerQuery); 
 
 	$('#exploreMoodsContainer').on('click', '.mood-btn', moodButtonClicked);
 
@@ -87,7 +89,7 @@ function setupLandingPage() {
 		$(this).addClass('selected');
 	});
 
-	$('#autoCompleteContainer').on('mousedown click', '.autocomplete-suggestion', function (e){
+	$('#autoCompleteContainer').on('mousedown click', '.autocomplete-suggestion', function (e) {
 		var item = $(this), v = item.attr('value');
 		if (v || item.hasClass('autocomplete-suggestion')) { // else outside click
 			state.selectedMood = v;
@@ -95,7 +97,7 @@ function setupLandingPage() {
 			$('.autocomplete-suggestion.selected').removeClass('selected');
 			$(this).addClass('selected');
 			hideDropdown();
-			performQuery();
+			triggerQuery();
 		}
 		return false;
 	});
@@ -150,7 +152,7 @@ function setupLandingPage() {
 				e.preventDefault();
 			}
 			if (e.key == 'Enter') {
-				performQuery();
+				triggerQuery();
 			}
 
 			hideDropdown();
@@ -185,24 +187,22 @@ function moodButtonClicked(e) {
 	state.query = v;
 	state.selectedMood = v;
 	$('#input-search').val(v);
-	performQuery();
-
+	triggerQuery();
 }
 
 /**
- * Performs a query with the entered parameters.
+ * Triggers a query.
  */
-function performQuery() {
-	console.log('TODO: performQuery')
+function triggerQuery() {
 	if (!state.selectedMood) {
 		window.location.reload();
 		return;
 	} else {
 		const selectedMood = $('#input-search').val() ? $('#input-search').val() : state.selectedMood;
 		const moods = [ selectedMood ]
-		window.location = '/search/' + moods.join('+') + '?'+ encodeQueryData({
-
-		});
+		performQuery({
+			moods: moods
+		})
 	}
 }
 
@@ -280,6 +280,64 @@ function showDropdown() {
 	$('#searchInputDropDown').parent().addClass('show');
 }
 
+// ========================
+// ===  LANDING PAGE
+// ========================
+
+/**
+ * Sets up the state and view for the search result page.
+ */
+function setupSearchPage() {
+	// only invoke this function, if we are on the landing page
+	if (!$('#search-view')) {
+		return;
+	}
+
+	$('#search-view').on('click', '.checkbox', toggleCheckbox);
+	$('#search-view').on('click', '.radio', toggleRadio);
+	$('#search-view').on('click', '.refine-query-item', refineQuery);
+}
+
+function refineQuery(e){
+	e.stopPropagation();
+
+	if (state.isReloading) {
+		return;
+	}
+	state.isReloading = true;
+	showLoadingView();
+
+	let moods = []
+	for (let label of $('#search-view .refine-query-item.mood-item input[type="checkbox"]:checked+label')) {
+		moods.push(label.title.toLowerCase());
+	}
+	let genres = []
+	for (let label of $('#search-view .refine-query-item.genre-item input[type="checkbox"]:checked+label:not(.ignore)')) {
+		genres.push(label.title.toLowerCase());
+	}
+
+	let query = {
+		moods: moods,
+		genres: genres,
+		queryParameter: {}
+	};
+
+	let sort_order_inputs = $('#search-view .refine-query-item.sort-item input[type="radio"]:checked');
+	if (sort_order_inputs.length > 0) {
+		query['queryParameter']['order'] = sort_order_inputs[0].value
+	}
+
+	performQuery(query)
+}
+
+function showLoadingView() {
+	$('.loading-view').addClass('show');
+}
+
+// ========================
+// ===  HELPERS
+// ========================
+	
 /**
  * Returns n random elements from an array.
  * 
@@ -300,6 +358,63 @@ function getRandom(arr, n) {
         taken[x] = --len in taken ? taken[len] : len;
     }
     return result;
+}
+
+/**
+ * 
+ * Toggles a checkbox
+ */
+function toggleCheckbox(e) {
+	e.preventDefault();
+	e.stopPropagation();
+
+	let input = $(this).children('input[type="checkbox"]')
+	let is_checked = input.prop('checked')
+	input.prop('checked', !is_checked)
+}
+
+/**
+ * 
+ * Toggles a radio button
+ */
+function toggleRadio(e) {
+	e.preventDefault();
+	e.stopPropagation();
+
+	let other_inputs = $(this).parent().find('input[type="radio"]');
+	other_inputs.prop('checked', false);
+
+	let input = $(this).children('input[type="radio"]');
+	input.prop('checked', true);
+}
+
+/**
+ * Performs a query with the entered parameters.
+ */
+function performQuery(config) {
+	if (!config || !config.moods) {
+		window.location.reload();
+		return;
+	} else if (config.moods.length == 0){
+		window.location = '/';
+		return;
+	} else {
+		const moods = config.moods;
+		let location = '/search/' + moods.join('+');
+
+		const genres = config.genres ? config.genres : [];
+		if (genres.length > 0) {
+			location += '/'
+			location += genres.join('+');
+		}
+
+		const queryParameter = config.queryParameter;
+		if (queryParameter && Object.keys(queryParameter).length ) {
+			location += ('?'+ encodeQueryData(queryParameter));
+		}
+
+		window.location = location;
+	}
 }
 
 /**

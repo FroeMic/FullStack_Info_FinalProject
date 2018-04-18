@@ -3,7 +3,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 
 from app import app, db
 from app.forms import RegistrationForm, LoginForm, SettingsForm, PasswordForm
-from app.models import User, Mood, SearchQuery
+from app.models import User, Mood, Genre, SearchQuery
 from app.utils import dict_to_object, rating_to_stars, ListConverter
 
 # helpers
@@ -17,22 +17,32 @@ app.url_map.converters['list'] = ListConverter
 def index():
     return render_template('index.html', title='Literapy')
 
-@app.route('/search/<list:moods>')
-def search(moods):
+@app.route('/search/<list:moods>', defaults={'genres': []})
+@app.route('/search/<list:moods>/<list:genres>')
+def search(moods, genres):    
     _moods = Mood.query.filter(Mood.title.in_(moods)).all()
-    
+    order = request.args.get('order') if request.args.get('order') else 'score'
+    print(order)
     if len(_moods) == 0:
         flash('Oooops! Looks like you we received an empty query.', 'error')
         redirect(url_for('index'))
 
-    query = SearchQuery(_moods)
+    _unqueried_moods = Mood.query.filter(~Mood.title.in_(moods)).all()
+
+    _genres = Genre.query.filter(Genre.title.in_(genres)).all()
+    _unqueried_genres = Genre.query.filter(~Genre.title.in_(genres)).all()
+
+    query = SearchQuery(_moods, genres=_genres, order_by=order)
     results = query.get_results()
 
-    for result in results:
-        print(result.score, result.book.title)
-
-
-    return render_template('search.html', results=results, rating_to_stars=rating_to_stars, moods=moods)
+    return render_template('search.html', 
+        results=results, 
+        rating_to_stars=rating_to_stars, 
+        selected_moods=moods, 
+        unqueried_moods=_unqueried_moods,
+        selected_genres=_genres,
+        unqueried_genres=_unqueried_genres,
+        sort_order = order )
 
 @app.route('/book/<book_id>')
 def show_book(book_id):
