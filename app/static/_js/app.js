@@ -198,9 +198,10 @@ function performQuery() {
 		window.location.reload();
 		return;
 	} else {
-		let selectedMood = $('#input-search').val() ? $('#input-search').val() : state.selectedMood;
-		window.location = '/search?' + encodeQueryData({
-			'mood': selectedMood
+		const selectedMood = $('#input-search').val() ? $('#input-search').val() : state.selectedMood;
+		const moods = [ selectedMood ]
+		window.location = '/search/' + moods.join('+') + '?'+ encodeQueryData({
+
 		});
 	}
 }
