@@ -28,9 +28,63 @@ class SyncBooksWithAmazonJob(Job):
     def _sync_book_with_amazon(self, book):
         amazon = AmazonAPI(app.config['AMAZON_ACCESS_KEY'], app.config['AMAZON_SECRET_KEY'], app.config['AMAZON_ASSOC_TAG'])
 
-        products = amazon.lookup(SearchIndex='Books', IdType='ISBN', ItemId=book.isbn13)
+        try:
+            products = amazon.lookup(SearchIndex='Books', IdType='ISBN', ItemId=book.isbn13)
 
-        book.amazon_url = products[0].offer_url
-        book.price = products[0].price_and_currency[0]
+            if type(products) is list:
+                book.amazon_url = products[0].offer_url
+                book.price = products[0].price_and_currency[0]
+
+                # print(products[0].offer_url)
+            else:
+                book.amazon_url = products.offer_url
+                book.price = products.price_and_currency[0]
+
+                # print(products.offer_url)
+
+        except AsinNotFound:
+            book.amazon_url = None
+            book.price = None
 
         db.session.commit()
+
+        # try:
+        #     if AsinNotFound:
+        #         print()
+        # if type(products) is list:
+        #     print(products[0].offer_url)
+        # else:
+        #     print(products.offer_url)
+        # except AsinNotFound:
+        #     print('No Result')
+
+
+        # print(products)
+
+        # for i, product in enumerate(products):
+        #   print(product.title)
+
+        # print(products.amazon_url)
+
+        # if type(products) is list:
+        #   amazon_url = products[0].offer_url
+        # else:
+        #   amazon_url = 'None'
+
+        # if type(products) is list:
+        #   amazon_url = products[0].offer_url
+        #   price = products[0].price_and_currency[0]
+        # else:
+        #   amazon_url = products.offer_url
+        #   price = products.price_and_currency
+
+        # print(amazon_url)
+        # print(price)
+
+
+
+        # book.amazon_url = products[0].offer_url
+        # book.price = products[0].price_and_currency[0]
+
+        # db.session.commit()
+        # print(type(products))
