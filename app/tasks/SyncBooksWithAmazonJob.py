@@ -1,6 +1,7 @@
+from app import app, queue, db
 from amazon.api import AmazonAPI, AsinNotFound
 
-amazon = AmazonAPI("AKIAJ4DKCCVFZIVIHWHA", "rYYuJf3c5maYOnDM2EBNd+d5sJWgXGsphgLR2Y7a", "literapy-21")
+amazon = AmazonAPI(app.config['AMAZON_ACCESS_KEY'], app.config['AMAZON_SECRET_KEY'], app.config['AMAZON_ASSOC_TAG'])
 
 try:
 	products = amazon.lookup(SearchIndex='All', IdType='ISBN', ItemId='9780450040184')
