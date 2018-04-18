@@ -34,13 +34,9 @@ class SyncBooksWithAmazonJob(Job):
             if type(products) is list:
                 book.amazon_url = products[0].offer_url
                 book.price = products[0].price_and_currency[0]
-
-                # print(products[0].offer_url)
             else:
                 book.amazon_url = products.offer_url
                 book.price = products.price_and_currency[0]
-
-                # print(products.offer_url)
 
         except AsinNotFound:
             book.amazon_url = None
