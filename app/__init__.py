@@ -25,6 +25,9 @@ from app import routes, models, forms, utils, tasks
 goodreadsjob = tasks.SyncBooksWithGoodReadsJob()
 queue.run(goodreadsjob) # runs the job immediately
 
+amazonjob = tasks.SyncBooksWithAmazonJob()
+queue.run(amazonjob) # runs the job immediately
+
 def _create_database():
     ''' Creates the database schema specified by the SQLAlchemy models '''
     print('Rebuilding database schema ... ')
