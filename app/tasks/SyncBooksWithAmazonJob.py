@@ -21,9 +21,9 @@ class SyncBooksWithAmazonJob(Job):
     def _schedule_next_run(self):
         today = datetime.today()
         tomorrow = today + timedelta(days=1)
-        tomorrow_1_am = datetime(tomorrow.year, tomorrow.month, tomorrow.day, hour = 1, tzinfo = None )
+        tomorrow_2_am = datetime(tomorrow.year, tomorrow.month, tomorrow.day, hour = 2, tzinfo = None )
 
-        queue.schedule(self, tomorrow_1_am)
+        queue.schedule(self, tomorrow_2_am)
 
     def _sync_book_with_amazon(self, book):
         amazon = AmazonAPI(app.config['AMAZON_ACCESS_KEY'], app.config['AMAZON_SECRET_KEY'], app.config['AMAZON_ASSOC_TAG'])
@@ -39,7 +39,6 @@ class SyncBooksWithAmazonJob(Job):
                 book.price = products.price_and_currency[0]
 
         except AsinNotFound:
-            book.amazon_url = None
-            book.price = None
+            pass
 
         db.session.commit()
