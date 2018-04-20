@@ -2,6 +2,23 @@ from app import db
 from datetime import datetime
 
 class Book(db.Model):
+    
+    def __init__(self, dict):
+        self.id = dict['id']
+        self.isbn = dict['isbn']
+        self.isbn13 = dict['isbn13']
+        self.title = dict['title']
+        self.author = dict['author']
+        self.price = dict['price']
+        self.rating = dict['rating']
+        self.description = dict['description']
+        self.cover_image_url = dict['cover_image_url']
+        self.goodreads_url = dict['goodreads_url']
+        self.goodreads_author_url = dict['goodreads_author_url']
+        self.amazon_url = dict['amazon_url']
+        self.created_at = dict['created_at']
+        self.updated_at = dict['updated_at']
+
     id = db.Column(db.Integer, primary_key=True)
     isbn = db.Column(db.String(128), index=True, nullable=False, unique=True)
     isbn13 = db.Column(db.String(128), index=True, nullable=False, unique=True)
