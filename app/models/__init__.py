@@ -7,3 +7,5 @@ from .mood import *
 from .book_mood import *
 from .review import *
 from .review_mood import *
+from .search_query import *
+from .search_query_result import *

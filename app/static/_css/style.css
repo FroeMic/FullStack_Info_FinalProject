@@ -14,6 +14,16 @@
     display: none !important;
 }
 
+/* BOOTSTRAP FIX */
+
+@media (max-width: 632px) {
+    .col-xs-6 {
+        -ms-flex: 0 0 50%;
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
 /* NAVBAR */
 body>.navbar + * {
     margin-top: 82px;
@@ -108,6 +118,80 @@ body>.navbar + * {
 }
 
 /* SEARCH PAGE */
+#search-view .refine-query-container {
+    margin: 20px 0;
+}
+
+#search-view .refine-query-container .dropdown {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+#search-view .refine-query-container .dropdown-menu {
+    width: min-content;
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+#search-view .refine-query-container .dropdown-toggle:after,
+#search-view .refine-query-container .dropdown-menu:before {
+    display: none;
+}
+
+#search-view .refine-query-container .btn.dropdown-toggle {
+    line-height: 1.75rem;
+    border-radius: 0.1rem;
+}
+
+#search-view .refine-query-container .show>.btn.dropdown-toggle {
+    background-color: transparent;
+}
+
+#search-view .refine-query-container .dropdown-item {
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 10px;
+    margin-bottom: 5px;
+    font-size: 9pt;
+}
+
+#search-view .refine-query-container .checkbox label {
+    text-transform: capitalize;
+    vertical-align: top;
+    line-height: 20px;
+}
+
+#search-view .refine-query-container .checkbox label::before,
+#search-view .refine-query-container .checkbox label::after {
+    width: 20;
+    height: 20;
+    border-radius: 1px;
+}
+
+#search-view .refine-query-container .checkbox label::after {
+    font-size: 9pt;
+}
+
+#search-view .refine-query-container .checkbox input[type="checkbox"]:checked+label::before {
+    border-color: transparent;
+}
+
+#search-view .refine-query-container .checkbox input[type="checkbox"]:checked+label::after {
+    opacity: 1;
+    background-color: #BCCE00;
+    color: white;
+}
+
+#search-view .refine-query-container .radio input[type="radio"]:checked+label::before {
+    background-color: #BCCE00;
+    border: none;
+}
+
+#search-view .refine-query-container .radio input[type="radio"]:checked+label::after {
+    background-color: white;
+    border-color: white;
+}
+
 #search-view .search-result {
     cursor: pointer;
     padding-right: 10px;
@@ -143,7 +227,12 @@ body>.navbar + * {
 
 #search-view .search-result .book-title {
     font-weight: 500;
-    font-size: 16pt;
+    font-size: 12pt;
+    color: black;
+}
+
+#search-view .search-result .book-title:hover {
+    text-decoration: unset;
 }
 
 #search-view .search-result .author {
@@ -152,6 +241,34 @@ body>.navbar + * {
 
 #search-view .search-result .rating {
     font-size: 10pt;
+}
+
+#search-view .loading-view {
+    display: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(255,255,255, 0.8);
+    z-index: 1000;
+}
+
+#search-view .loading-view .container {
+    margin-top: 40%;
+    font-size: 16pt;
+}
+
+#search-view .loading-view .container i { 
+    font-size: 28pt;
+}
+
+#search-view .loading-view .container ih4{ 
+    font-weight: 300;
+}
+
+#search-view .loading-view.show {
+    display: unset;
 }
 
 .hover-zoom {
@@ -166,7 +283,7 @@ body>.navbar + * {
  }
 
 
-/* REGISTER and LOGING VIEW */
+/* REGISTER and LOGIN VIEW */
 .card-signup,
 .card-signin {
     max-width: unset;
