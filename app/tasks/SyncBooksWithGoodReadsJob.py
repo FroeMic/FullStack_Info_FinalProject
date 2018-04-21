@@ -55,7 +55,7 @@ class SyncBooksWithGoodReadsJob(Job):
         book.author = decoded_book_data['author']
         book.rating = decoded_book_data['rating']
         book.description = decoded_book_data['description']
-        if book.cover_image_url is None:
+        if (book.cover_image_url is None) or ('goodreads' in book.cover_image_url):
             book.cover_image_url = decoded_book_data['cover_image_url']
         book.goodreads_url = decoded_book_data['goodreads_url']
         book.goodreads_author_url = decoded_book_data['goodreads_author_url']
