@@ -166,7 +166,7 @@ body>.navbar + * {
  }
 
 
-/* REGISTER and LOGING VIEW */
+/* REGISTER and LOGIN VIEW */
 .card-signup,
 .card-signin {
     max-width: unset;
@@ -275,3 +275,12 @@ body>.navbar + * {
 #readinglist h2 {
     margin-top: 100px;
 }
+
+/* BOOK DETAILS PAGE */
+.info img{
+    width: 100%;
+    height: auto;
+}
+
+
+

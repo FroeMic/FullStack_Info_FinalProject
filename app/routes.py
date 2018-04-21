@@ -3,7 +3,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 
 from app import app, db
 from app.forms import RegistrationForm, LoginForm, SettingsForm, PasswordForm
-from app.models import User
+from app.models import User, Book
 from app.utils import dict_to_object, rating_to_stars
 
 
@@ -66,7 +66,10 @@ def search():
 
 @app.route('/book/<book_id>')
 def show_book(book_id):
-    return render_template('book_details.html', book_id=book_id)
+    book = Book.query.get(int(book_id))
+    if book is None:
+        abort(404)
+    return render_template('book_details.html', book=book, rating_to_stars=rating_to_stars)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
