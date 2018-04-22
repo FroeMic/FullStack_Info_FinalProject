@@ -401,3 +401,9 @@ body>.navbar + * {
 #readinglist h2 {
     margin-top: 100px;
 }
+
+/* BOOK DETAILS PAGE */
+.info img{
+    width: 100%;
+    height: auto;
+}

@@ -31,12 +31,16 @@ class SyncBooksWithAmazonJob(Job):
         try:
             products = amazon.lookup(SearchIndex='Books', IdType='ISBN', ItemId=book.isbn13)
 
-            if type(products) is list:
+            if type(products) is list and len(products) > 0:
                 book.amazon_url = products[0].offer_url
                 book.price = products[0].price_and_currency[0]
+                if products[0].large_image_url is not None:
+                    book.cover_image_url = products[0].large_image_url
             else:
                 book.amazon_url = products.offer_url
                 book.price = products.price_and_currency[0]
+                if products.large_image_url is not None:
+                    book.cover_image_url = products.large_image_url
 
         except AsinNotFound:
             pass

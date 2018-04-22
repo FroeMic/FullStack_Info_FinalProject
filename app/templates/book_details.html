@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% block title %}{{ book.title }}{% endblock %}
+
 {% block navlinks %}
   {{ super() }}
 {% endblock %}
@@ -13,14 +15,18 @@
                 <div class="row">
                     <div class="col-4">
                         <div class="info">
-                            <img src="https://images.gr-assets.com/books/1320562005l/4214.jpg" class="rounded float-left">
+                            <img src="{{book.cover_image_url}}" class="rounded float-left">
                         </div>
                     </div>
                     <div class="col-8">
-                        <h3 class="card-title">Life of Pi</h3>
-                        <h6>by Yann Martel</h6>
-                        <p>3.86 ★ ★ ★ ☆ ☆</p>
-                        <p class="card-text">Life of Pi is a fantasy adventure novel by Yann Martel published in 2001. The protagonist, Piscine Molitor "Pi" Patel, a Tamil boy from Pondicherry, explores issues of spirituality and practicality from an early age. He survives 227 days after a shipwreck while stranded on a boat in the Pacific Ocean with a Bengal tiger named Richard Parker.</p>
+                        <h3 class="card-title">{{ book.title }}</h3>
+                        <h6>{{ book.author }}</h6>
+                        <p>{{book.rating}}
+                            {% for star in rating_to_stars(book.rating) %}
+                            <span>{{star}}</span>
+                            {% endfor %}
+                        </p>
+                        <p class="card-text">{{book.description|safe}}</p>
                         <a href="#" class="btn btn-primary">Buy This Book</a>
                     </div>
                 </div>
