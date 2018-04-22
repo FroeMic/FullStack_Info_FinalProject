@@ -47,7 +47,6 @@ def search(moods, genres):
 @app.route('/book/<book_id>')
 def show_book(book_id):
     book = Book.query.get(int(book_id))
-    console.log(book.title)
     if book is None:
         abort(404)
     return render_template('book_details.html', book=book, rating_to_stars=rating_to_stars, title=book.title)
