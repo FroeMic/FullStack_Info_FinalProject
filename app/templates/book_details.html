@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% block title %}{{ book.title }}{% endblock %}
+
 {% block navlinks %}
   {{ super() }}
 {% endblock %}
@@ -22,7 +24,8 @@
                         <p>{{book.rating}}
                             {% for star in rating_to_stars(book.rating) %}
                             <span>{{star}}</span>
-                            {% endfor %}</p>
+                            {% endfor %}
+                        </p>
                         <p class="card-text">{{book.description|safe}}</p>
                         <a href="#" class="btn btn-primary">Buy This Book</a>
                     </div>

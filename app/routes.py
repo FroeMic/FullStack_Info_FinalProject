@@ -47,9 +47,10 @@ def search(moods, genres):
 @app.route('/book/<book_id>')
 def show_book(book_id):
     book = Book.query.get(int(book_id))
+    console.log(book.title)
     if book is None:
         abort(404)
-    return render_template('book_details.html', book=book, rating_to_stars=rating_to_stars)
+    return render_template('book_details.html', book=book, rating_to_stars=rating_to_stars, title='testing')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -63,7 +64,7 @@ def register():
         db.session.commit()
         flash(user.firstname + ', we successfully registered your account!', 'info')
         return redirect(url_for('login'))
-    return render_template('register.html', title='Sign Up', form=form)
+    return render_template('register.html', title='testing', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
