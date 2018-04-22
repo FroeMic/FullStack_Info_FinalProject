@@ -1,7 +1,11 @@
 <html>
   <head>
 
-    <title>{% block title %}{% endblock %} - Literapy</title>
+    {% if title %}
+    <title>{{ title }} - Literapy</title>
+    {% else %}
+    <title>Literapy</title>
+    {% endif %}
     
 
     <!-- Compiled and minified CSS -->
