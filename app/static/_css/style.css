@@ -293,6 +293,9 @@ body>.navbar + * {
 }
 
 #about {
+    background-image: url('/static/_assets/img/bookbg.png');
+    background-size: cover;
+    background-color: #71706d;
     padding-top: 50px;
     padding-bottom: 45px;
 }
