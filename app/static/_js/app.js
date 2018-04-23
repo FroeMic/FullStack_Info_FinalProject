@@ -20,6 +20,7 @@ function setup() {
 	markActiveLinks();
 	setupLandingPage();
 	setupSearchPage();
+	setupDelete();
 }
 
 /**
@@ -432,7 +433,7 @@ function encodeQueryData(data) {
  * Delete Bookmark
  */
 
-function setup() {
+function setupDelete() {
     $('.delete-form').on('submit', submitDeleteRequest);
 }
 

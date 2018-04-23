@@ -708,7 +708,15 @@ Created using IcoMoon - icomoon.io
 }
 
 /* BOOK DETAILS PAGE */
-.info img{
+.info img {
     width: 100%;
     height: auto;
 }
+
+/* DELETE BOOKMARK */
+
+.delete-form {
+    display: inline;
+    margin: 0;
+}
+

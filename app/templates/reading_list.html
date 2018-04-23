@@ -30,9 +30,9 @@
                         <span>{{star}}</span>
                         {% endfor %}
                     </p>
-					<a class="btn btn-primary" href="{{ url_for('show_book', book_id=result.book.id)}}">See Book Details</a>
-					<form class="form delete-form" action="{{ url_for('bookmark', book_id=result.book.id) }}" method="DELETE">
-                            <input class="btn btn-primary"" type="submit" value="Remove Bookmark">
+					<button class="btn btn-primary" href="{{ url_for('show_book', book_id=result.book.id)}}">See Book Details</button>
+					<form class="form delete-form" action="{{ url_for('delete_bookmark', book_id=result.book.id) }}" method="DELETE">
+                            <button class="btn btn-primary" type="submit">Remove</button>
                     </form>
 				</div>
 			</div>
