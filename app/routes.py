@@ -106,7 +106,8 @@ def bookmark(book_id):
 @app.route('/mybooks')
 @login_required
 def mybooks():
-    return render_template('reading_list.html')
+    results = Bookmark.query.all()
+    return render_template('reading_list.html', results=results, rating_to_stars=rating_to_stars)
 
 @app.route('/settings')
 @login_required
