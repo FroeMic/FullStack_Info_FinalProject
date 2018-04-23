@@ -3,7 +3,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 
 from app import app, db
 from app.forms import RegistrationForm, LoginForm, SettingsForm, PasswordForm
-from app.models import User, Book, Mood, Genre, SearchQuery
+from app.models import User, Book, Mood, Genre, SearchQuery, Bookmark
 from app.utils import dict_to_object, rating_to_stars, ListConverter
 
 # helpers
@@ -47,9 +47,15 @@ def search(moods, genres):
 @app.route('/book/<book_id>')
 def show_book(book_id):
     book = Book.query.get(int(book_id))
+    check_bookmark = Bookmark.query.filter_by(book_id=book_id).first()
+    if check_bookmark is None:
+        bookmarked = False
+    else:
+        bookmarked = True
+    print(bookmarked)
     if book is None:
         abort(404)
-    return render_template('book_details.html', book=book, rating_to_stars=rating_to_stars, title=book.title)
+    return render_template('book_details.html', book=book, rating_to_stars=rating_to_stars, title=book.title, bookmarked=bookmarked)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -87,6 +93,16 @@ def logout():
 # =========================
 # 2. Login Required
 # # =========================
+@app.route('/bookmark/<book_id>', methods=['GET', 'POST'])
+@login_required
+def bookmark(book_id):
+    bookmark = Bookmark(user_id=current_user.get_id(), book_id=int(book_id))
+
+    db.session.add(bookmark)
+    db.session.commit()
+    flash(current_user.firstname + ', we successfully this book to your reading list!', 'info')
+    return redirect(url_for('mybooks'))
+
 @app.route('/mybooks')
 @login_required
 def mybooks():

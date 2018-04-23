@@ -27,7 +27,12 @@
                             {% endfor %}
                         </p>
                         <p class="card-text">{{book.description|safe}}</p>
-                        <a href="#" class="btn btn-primary">Buy This Book</a>
+                        <a href="{{ book.amazon_url }}" class="btn btn-primary">Buy This Book</a>
+                        {% if bookmarked == True %}
+                            <button class="btn btn-primary">Saved</a>
+                        {% else %}
+                            <a href="/bookmark/{{ book.id }}" class="btn btn-primary">Save for Later</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
