@@ -48,11 +48,7 @@ def search(moods, genres):
 def show_book(book_id):
     book = Book.query.get(int(book_id))
     check_bookmark = Bookmark.query.filter_by(book_id=book_id).first()
-    if check_bookmark is None:
-        bookmarked = False
-    else:
-        bookmarked = True
-    print(bookmarked)
+    bookmarked = check_bookmark is not None
     if book is None:
         abort(404)
     return render_template('book_details.html', book=book, rating_to_stars=rating_to_stars, title=book.title, bookmarked=bookmarked)
@@ -93,15 +89,29 @@ def logout():
 # =========================
 # 2. Login Required
 # # =========================
-@app.route('/bookmark/<book_id>', methods=['GET', 'POST'])
+@app.route('/bookmark/<book_id>', methods=['GET'])
 @login_required
 def bookmark(book_id):
     bookmark = Bookmark(user_id=current_user.get_id(), book_id=int(book_id))
 
     db.session.add(bookmark)
     db.session.commit()
-    flash(current_user.firstname + ', we successfully this book to your reading list!', 'info')
     return redirect(url_for('mybooks'))
+
+@app.route('/bookmark/<book_id>', methods=['DELETE'])
+@login_required
+def delete_bookmark(book_id):
+    bookmark = Bookmark(user_id=current_user.get_id(), book_id=int(book_id))
+
+    if bookmark is not None and bookmark.user_id == current_user.id:
+        db.session.delete(bookmark)
+        db.session.commit()
+
+    flash('Bookmark was deleted!', 'info')
+    return jsonify(
+        redirect=True,
+        redirect_url=url_for('mybooks')
+    )
 
 @app.route('/mybooks')
 @login_required

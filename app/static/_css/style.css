@@ -342,10 +342,6 @@ blockquote cite {
     display: block;
     margin-top: 5px;
 }
- 
-blockquote cite:before {
-    content: "\2014 \2009";
-}
 
 
 /* REGISTER and LOGIN VIEW */
