@@ -76,7 +76,7 @@ body>.navbar + * {
     max-height: 640px;
 }
 .landing-page .page-header-image {
-    background-image: url('/static/_assets/img/bg_books.jpg');
+    background-image: url('/static/_assets/img/bg_leaves.jpg');
     transform: translate3d(0px, 0px, 0px);
 }
 
@@ -114,7 +114,7 @@ body>.navbar + * {
 }
 
 #autoCompleteContainer .autocomplete-suggestion.selected {
-    background-color: #D1F8FE;
+    background-color: #e6f7f6;
 }
 
 /* SEARCH PAGE */
@@ -194,13 +194,14 @@ body>.navbar + * {
 
 #search-view .search-result {
     cursor: pointer;
-    padding-right: 10px;
-    padding-left: 10px;
+    padding-right: 12px;
+    padding-left: 12px;
+    padding-bottom: 20px;
 }
 
 #search-view .search-result .img-container {
     position: relative;
-    height: 200px;
+    height: 270px;
     overflow: hidden;
     width: 100%;
     margin-bottom: 5px;
@@ -281,6 +282,70 @@ body>.navbar + * {
     -webkit-transform: scale(1.08);
      transform: scale(1.08)
  }
+
+/* HOW IT WORKS */
+
+#description-card {
+    font-size: 10pt;
+}
+
+.image-icon {
+    width: 30%;
+}
+
+#about {
+    background-image: url('/static/_assets/img/bookbg.png');
+    background-size: cover;
+    background-color: #71706d;
+    padding-top: 50px;
+    padding-bottom: 45px;
+}
+
+hr {
+  max-width: 80px;
+  border-width: 3px;
+  border-color: #F05F40;
+  margin-bottom: 50px;
+}
+
+hr.light {
+  border-color: #fff;
+}
+
+h4.info {
+    font-size: 17pt;
+    font-weight: bold;
+}
+
+blockquote {
+    font-family: Georgia, serif;
+    font-size: 30px;
+    font-style: italic;
+    line-height: 1.45;
+    color: #fff;
+}
+
+blockquote:before {
+    display: block;
+    padding-left: 20px;
+    content: "\201C";
+    font-size: 90px;
+    position: absolute;
+    left: -40px;
+    top: -40px;
+    color: #7a7a7a;
+}
+
+blockquote cite {
+    color: #fff;
+    font-size: 14px;
+    display: block;
+    margin-top: 5px;
+}
+ 
+blockquote cite:before {
+    content: "\2014 \2009";
+}
 
 
 /* REGISTER and LOGIN VIEW */

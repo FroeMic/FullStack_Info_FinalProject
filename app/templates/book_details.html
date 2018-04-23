@@ -27,7 +27,7 @@
                             {% endfor %}
                         </p>
                         <p class="card-text">{{book.description|safe}}</p>
-                        <a href="#" class="btn btn-primary">Buy This Book</a>
+                        <a href="{{book.amazon_url}}" target="_blank" class="btn btn-primary">Buy This Book</a>
                     </div>
                 </div>
             </div>
