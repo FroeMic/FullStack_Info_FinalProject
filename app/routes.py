@@ -47,10 +47,16 @@ def search(moods, genres):
 @app.route('/book/<book_id>')
 def show_book(book_id):
     book = Book.query.get(int(book_id))
-    check_bookmark = Bookmark.query.filter_by(book_id=book_id).first()
-    bookmarked = check_bookmark is not None
+
+    if not current_user.is_anonymous:
+        check_bookmark  = Bookmark.query.filter_by(book_id=book_id, user_id=current_user.id).first()
+        bookmarked = check_bookmark is not None
+    else:
+        bookmarked = None
+
     if book is None:
         abort(404)
+
     return render_template('book_details.html', book=book, rating_to_stars=rating_to_stars, title=book.title, bookmarked=bookmarked)
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -92,7 +98,8 @@ def logout():
 @app.route('/bookmark/<book_id>', methods=['GET'])
 @login_required
 def bookmark(book_id):
-    bookmark = Bookmark(user_id=current_user.get_id(), book_id=int(book_id))
+    if Bookmark.query.filter_by(user_id=current_user.get_id(), book_id=int(book_id)).first() is None:
+        bookmark = Bookmark(user_id=current_user.get_id(), book_id=int(book_id))
 
     db.session.add(bookmark)
     db.session.commit()
@@ -100,9 +107,10 @@ def bookmark(book_id):
 
 @app.route('/bookmark/<book_id>', methods=['DELETE'])
 def delete_bookmark(book_id):
+@login_required
     bookmark = Bookmark.query.filter_by(user_id=current_user.get_id(), book_id=int(book_id)).first()
 
-    if bookmark is not None and bookmark.user_id == current_user.id:
+    if bookmark is not None:
         db.session.delete(bookmark)
         db.session.commit()
     return jsonify(
@@ -113,8 +121,8 @@ def delete_bookmark(book_id):
 @app.route('/mybooks')
 @login_required
 def mybooks():
-    results = Bookmark.query.all()
-    return render_template('reading_list.html', results=results, rating_to_stars=rating_to_stars)
+    bookmarks = Bookmark.query.all()
+    return render_template('reading_list.html', bookmarks=bookmarks, rating_to_stars=rating_to_stars)
 
 @app.route('/settings')
 @login_required

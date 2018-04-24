@@ -11,27 +11,27 @@
 		<div class="col-lg-10 ml-auto mr-auto">
 			<h2 class="title text-black">Saved Books</h2>
 
-			{% if results|length == 0 %}
+			{% if bookmarks|length == 0 %}
             <p>You don't have any books saved yet!</p>
             {% endif %}
 
-			{% for result in results %}
+			{% for bookmark in bookmarks %}
 			<div class ="row">
 				<div class ="col-2">
 					<div class="img-container">
-						<img class="rounded float-left" src="{{result.book.cover_image_url}}" alt="" />
+						<img class="rounded float-left" src="{{bookmark.book.cover_image_url}}" alt="" />
 					</div>
 				</div>
 				<div class="col-10">
-					<h4>{{result.book.title}}</h4>
-					<p>by {{result.book.author}}</p>
-                    <p>{{result.book.rating}}
-                        {% for star in rating_to_stars(result.book.rating) %}
+					<h4>{{bookmark.book.title}}</h4>
+					<p>by {{bookmark.book.author}}</p>
+                    <p>{{bookmark.book.rating}}
+                        {% for star in rating_to_stars(bookmark.book.rating) %}
                         <span>{{star}}</span>
                         {% endfor %}
                     </p>
-					<a href="{{ url_for('show_book', book_id=result.book.id)}}"><button class="btn btn-primary">See Book Details</button></a>
-					<form class="form delete-form" action="{{ url_for('delete_bookmark', book_id=result.book.id) }}" method="DELETE">
+					<a href="{{ url_for('show_book', book_id=bookmark.book.id)}}"><button class="btn btn-primary">See Book Details</button></a>
+					<form class="form delete-form" action="{{ url_for('delete_bookmark', book_id=bookmark.book.id) }}" method="DELETE">
                             <button class="btn btn-primary" type="submit">Remove</button>
                     </form>
 				</div>
