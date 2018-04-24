@@ -443,8 +443,8 @@ Created using IcoMoon - icomoon.io
 -------------------------------- */
 @font-face {
   font-family: 'myicons';
-  src: url("../_fonts/myicons.eot");
-  src: url("../_fonts/myicons.eot") format("embedded-opentype"), url("../_fonts/myicons.woff2") format("woff2"), url("../_fonts/myicons.woff") format("woff"), url("../_fonts/myicons.ttf") format("truetype");
+  src: url("/static/_fonts/myicons.eot");
+  src: url("/static/_fonts/myicons.eot") format("embedded-opentype"), url("/static/_fonts/myicons.woff2") format("woff2"), url("/static/_fonts/myicons.woff") format("woff"), url("/static/_fonts/myicons.ttf") format("truetype");
   font-weight: normal;
   font-style: normal; }
 /*------------------------
