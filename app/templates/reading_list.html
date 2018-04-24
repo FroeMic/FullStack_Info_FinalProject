@@ -32,12 +32,14 @@
                     </p>
 					<a href="{{ url_for('show_book', book_id=bookmark.book.id)}}"><button class="btn btn-primary">See Book Details</button></a>
 					<form class="form delete-form" action="{{ url_for('delete_bookmark', book_id=bookmark.book.id) }}" method="DELETE">
-						<button class="btn btn-primary" type="submit">Remove</button>
+						<button class="btn btn-neutral" type="submit">
+							<i class="now-ui-icons nc-icon nc-favourite-31"></i> 
+							Remove Bookmark
+						</button>
                     </form>
 				</div>
 			</div>
-			{% endfor %}
-
+			{% endfor %}s
 		</div>
 	</div>
 </div>
