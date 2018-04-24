@@ -106,8 +106,8 @@ def bookmark(book_id):
     return redirect(url_for('show_book', book_id=book_id))
 
 @app.route('/bookmark/<book_id>', methods=['DELETE'])
-def delete_bookmark(book_id):
 @login_required
+def delete_bookmark(book_id):
     bookmark = Bookmark.query.filter_by(user_id=current_user.get_id(), book_id=int(book_id)).first()
 
     if bookmark is not None:
