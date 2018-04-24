@@ -48,11 +48,10 @@ def search(moods, genres):
 def show_book(book_id):
     book = Book.query.get(int(book_id))
 
+    bookmarked = False
     if not current_user.is_anonymous:
         check_bookmark  = Bookmark.query.filter_by(book_id=book_id, user_id=current_user.id).first()
         bookmarked = check_bookmark is not None
-    else:
-        bookmarked = None
 
     if book is None:
         abort(404)
@@ -100,9 +99,9 @@ def logout():
 def bookmark(book_id):
     if Bookmark.query.filter_by(user_id=current_user.get_id(), book_id=int(book_id)).first() is None:
         bookmark = Bookmark(user_id=current_user.get_id(), book_id=int(book_id))
+        db.session.add(bookmark)
+        db.session.commit()
 
-    db.session.add(bookmark)
-    db.session.commit()
     return redirect(url_for('show_book', book_id=book_id))
 
 @app.route('/bookmark/<book_id>', methods=['DELETE'])
@@ -110,12 +109,24 @@ def bookmark(book_id):
 def delete_bookmark(book_id):
     bookmark = Bookmark.query.filter_by(user_id=current_user.get_id(), book_id=int(book_id)).first()
 
+    referrer = request.args.get('referrer')
+    referrer = referrer if referrer else url_for('mybooks')
+    
+    redirect_url = url_for('mybooks')
+    split_path = referrer.split('/')
+    print(referrer)
+    print(split_path)
+    print(len(split_path))
+    print(split_path[-2])
+    if len(split_path) >= 2 and split_path[-2] == 'book':
+        redirect_url = url_for('show_book', book_id=int(split_path[-1]))
+
     if bookmark is not None:
         db.session.delete(bookmark)
         db.session.commit()
     return jsonify(
         redirect=True,
-        redirect_url=url_for('mybooks')
+        redirect_url=redirect_url
     )
 
 @app.route('/mybooks')

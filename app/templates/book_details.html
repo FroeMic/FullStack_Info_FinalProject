@@ -29,11 +29,6 @@
                                     {% endfor %}
                                 </p>
                             </div>
-                            <div class="col-2">
-                                <div class="anim-icon anim-icon-md star">
-                                <input type="checkbox" id="star1" />
-                                <label for="star1"></label>
-                             </div>
                         </div>
                     </div>
 
@@ -43,8 +38,11 @@
                         <a href="{{ book.amazon_url }}" class="btn btn-primary">Buy This Book</a>
                         {% endif %}
                         {% if bookmarked %}
-                             <a href="/bookmark/{{ book.id }}" class="btn btn-primary"><i class="nc-icon nc-favourite-31"></i> Saved</a>
+                             <form class="form delete-form" action="{{ url_for('delete_bookmark', book_id=book.id) }}" method="DELETE">
+                                <button class="btn btn-primary" type="submit"><i class="nc-icon nc-favourite-31"></i>Remove Bookmark</button>
+                            </form>
                         {% else %}
+
                             <a href="/bookmark/{{ book.id }}" class="btn btn-primary"><i class="nc-icon nc-favourite-31-2"></i> Save for Later</a>
                         {% endif %}
                     </div>

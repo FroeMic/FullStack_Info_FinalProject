@@ -439,7 +439,8 @@ function setupDelete() {
 
 function submitDeleteRequest(e) {
     e.preventDefault();
-    var endPoint = $(this).attr('action');
+	let endPoint = $(this).attr('action');
+	endPoint = endPoint + '?referrer=' + String(window.location);
 
     $.ajax(endPoint, {
         type: 'DELETE',
