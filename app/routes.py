@@ -153,7 +153,7 @@ def delete_bookmark(book_id):
 @app.route('/mybooks')
 @login_required
 def mybooks():
-    bookmarks = Bookmark.query.all()
+    bookmarks = Bookmark.query.filter_by(user_id=current_user.id).all()
     return render_template('reading_list.html', bookmarks=bookmarks, rating_to_stars=rating_to_stars)
 
 @app.route('/settings')
