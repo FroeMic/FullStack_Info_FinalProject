@@ -45,9 +45,11 @@ def drop_database():
     db.drop_all()
     print('Done!')
 
-def seed_database():
-    create_database(hard=True)
-    seed.seed_database()
+def run_sync_jobs():
+    '''Runs the synchronization jobs against the APIs of
+    first goodreads and then amazon in a synchronous manner. '''
+    tasks.SyncBooksWithGoodReadsJob(repeat = False).run()
+    tasks.SyncBooksWithAmazonJob(repeat = False).run()
 
 # AUTO SETUP
 def _bootstrap_app_if_neccessary():
@@ -83,8 +85,6 @@ def _make_sure_directory_exists(path):
 def _make_sure_database_exists(path):
     if not os.path.exists(path):
         create_database()
-
-_bootstrap_app_if_neccessary()
 
 
 
