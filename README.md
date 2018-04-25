@@ -13,7 +13,9 @@ After **initially cloning** the repository make sure that
 
 1. All the dependecies in `requirements.txt` are installed. You can install them by running `pip install -r requirements.txt`.
 2. You created and configured the dotenv file (`.env`). Just copy and rename the `.env.example`.
-3. You created the database. In your terminal navigate to this folder and run `python` to bring up the python interactive shell. Then run the following three commands: `import app`, then `app._create_database()` and finally `exit()`.
+3. You created the database. In your terminal navigate to this folder and run `python` to bring up the python interactive shell. Then run the following three commands: `import app`, then `app.create_database()` and finally `exit()`.
+4. You seeded the database. Navigate to `/resources/scripts/import_books` and follow the instructions to seed the database you just created.
+5. Now run `python run.py` to start up the server. It will automatically check whether Jobs for synchronyzing the local database against the goodreads and amazon APIs exist and create them if not so. If you want to run the jobs immediately (it still takes time, since it is done book after book) stop the server and bring up the python interactive shell. Then run the following three commands: `import app`, then `app.run_sync_jobs()` and finally `exit()`.
 
 ## Folder Structure
 
