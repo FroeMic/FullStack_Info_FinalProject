@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash, jsonify, request
+from flask import render_template, redirect, url_for, flash, jsonify, request, abort
 from flask_login import current_user, login_user, logout_user, login_required
 
 from app import app, db
@@ -10,14 +10,36 @@ from app.utils import dict_to_object, rating_to_stars, ListConverter
 app.url_map.converters['list'] = ListConverter
 
 # =========================
+# Error Handlers 
+# =========================
+@app.errorhandler(Exception)
+def unhandled_exception(e):
+    return render_template('error_page.html', 
+        error_code=500, 
+        error_title="Looks like our librarian got lost looking for your book! ", 
+        error_message="We encountered an internal server error and could not complete your request."), 500
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    return render_template('error_page.html', 
+        error_code=500, 
+        error_title="Looks like our librarian got lost looking for your book! ", 
+        error_message="We encountered an internal server error and could not complete your request."), 500
+
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('error_page.html', 
+        error_code=404, 
+        error_title="Looks like our book is missing a page!", 
+        error_message="The page you are looking for could not be found."), 404
+
+# =========================
 # Anonymously Accessible 
 # =========================
 
 @app.route('/')
 def index():
     random_books = Book.get_random()
-    for book in random_books:
-        print(len(book.moods))
     return render_template('index.html', title='Literapy', explore_books=random_books)
 
 @app.route('/search/<list:moods>', defaults={'genres': []})
