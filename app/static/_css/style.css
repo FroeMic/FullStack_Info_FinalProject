@@ -95,6 +95,15 @@ body>.navbar + * {
     background-color: white;
 }
 
+.landing-page #input-search,
+.landing-page .input-group-addon {
+    box-shadow: 1px 1px white;
+}
+
+.landing-page #input-search + .input-group-addon {
+    box-shadow: -2px 1px white;
+}
+
 .landing-page .dropdown-toggle:after,
 .landing-page .dropdown-menu:before {
     display: none;
@@ -138,7 +147,7 @@ body>.navbar + * {
     width: 100%;
 }
 
-.landing-page .explore-book-container  .book-title {
+.landing-page .explore-book-container .book-title {
     font-weight: 500;
     font-size: 12pt;
     color: black;
@@ -181,6 +190,13 @@ body>.navbar + * {
 .landing-page .learn-more {
     margin-top: 50px;
 }
+
+.landing-page hr {
+    max-width: 80px;
+    border-width: 3px;
+    border-color: #F05F40;
+    margin-bottom: 50px;
+  }  
 
 /* SEARCH PAGE */
 #search-view .refine-query-container {
@@ -344,7 +360,6 @@ body>.navbar + * {
 }
 
 #book-detail-view .disclaimer {
-    height: 10pt;
     color: rgba(0,0,0, 0.4);
     margin-top: 40px;
     font-style: italic;
@@ -356,7 +371,12 @@ body>.navbar + * {
 
 #book-detail-view .disclaimer img {
     opacity: 0.75;
-    height: 100%;
+    height: 10pt;
+}
+
+#book-detail-view .info img {
+    width: 100%;
+    height: auto;
 }
 
 .hover-zoom {
@@ -384,13 +404,6 @@ body>.navbar + * {
     background-color: #71706d;
     padding-top: 50px;
     padding-bottom: 45px;
-}
-
-.landing-page hr {
-  max-width: 80px;
-  border-width: 3px;
-  border-color: #F05F40;
-  margin-bottom: 50px;
 }
 
 hr.light {
@@ -610,6 +623,11 @@ Created using IcoMoon - icomoon.io
     border-radius: .2rem;
 }
 
+#readinglist .img-container img {
+    object-fit: cover;
+    width: 100%;
+}
+
 #readinglist h4 {
     padding: 0;
     margin: 0;
@@ -620,10 +638,8 @@ Created using IcoMoon - icomoon.io
     margin-top: 100px;
 }
 
-/* BOOK DETAILS PAGE */
-.info img {
-    width: 100%;
-    height: auto;
+#readinglist .bookmark-container {
+    margin-bottom: 40px;
 }
 
 /* DELETE BOOKMARK */
