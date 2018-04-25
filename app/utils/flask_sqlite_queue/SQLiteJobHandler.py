@@ -27,3 +27,6 @@ def remove_queue(queue):
 def configure_scheduler(cycle_interval = 10):
     '''configures the scheduler'''
     get_scheduler().interval = cycle_interval
+
+def get_future_jobs(queue):
+    return queue.get_future_jobs()

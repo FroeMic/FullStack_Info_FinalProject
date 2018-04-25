@@ -51,6 +51,17 @@ def _get_due_jobs(con, table):
     cursor = con.execute(query, [datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")])
     return [(row[0], row[1]) for row in cursor.fetchall()]
 
+def _get_future_jobs(con, table):
+    query = '''
+        SELECT id, job
+        FROM {}
+        WHERE deadline > ?
+        ORDER BY deadline ASC
+    '''.format(table)
+
+    cursor = con.execute(query, [datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")])
+    return [(row[0], row[1]) for row in cursor.fetchall()]
+
 def _start_job(con, table, id):
     query = '''
         UPDATE {}
@@ -125,6 +136,17 @@ class SQLiteJobQueue(object):
     def run_due_jobs(self):
         self._load_due_jobs()
         self._spawn_worker_threads()
+
+    def get_future_jobs(self):
+        future_jobs = []
+        with _get_con(self.path) as con:
+            queue = _get_future_jobs(con, self.table)
+
+            for (id, job_dump) in queue:
+                job = pickle.loads(job_dump)
+                job.id = id
+                future_jobs.append(job)
+        return future_jobs
 
     def _load_due_jobs(self):
         with self._job_lock:
