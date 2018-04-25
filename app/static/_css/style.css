@@ -178,6 +178,10 @@ body>.navbar + * {
     flex-direction: column;
 }
 
+.landing-page .learn-more {
+    margin-top: 50px;
+}
+
 /* SEARCH PAGE */
 #search-view .refine-query-container {
     margin: 20px 0;
@@ -517,6 +521,11 @@ blockquote cite {
 .fixed-section,
 .settings-content {
     padding-top: 30px;
+}
+
+.settings-about ul {
+    list-style: none;
+    padding-left: 0;
 }
 
 /* --------------------------------
