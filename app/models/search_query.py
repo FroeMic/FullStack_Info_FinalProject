@@ -30,12 +30,10 @@ class SearchQuery(object):
         return results
 
     def _filter_genres(self, results):
-        print('filter genres')
-        allowed_genre_ids = [genre.id for genre in self.genres]
         query = ' '.join([
             'SELECT DISTINCT bg.book_id',
             'FROM {} bg'.format(BookGenre.__table__),
-            'WHERE bg.id in ({})'.format(self._get_genre_query_string())
+            'WHERE bg.genre_id in ({})'.format(self._get_genre_query_string())
         ])
         rows = db.engine.execute(query)
         allowed_book_ids = [row['book_id'] for row in rows]
