@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block navlinks %}
+  {{ super() }}
+{% endblock %}
+
+{% block content %}
+  <section class="settings">
+      <div class="row">
+          <div class="col col-lg-3 col-md-6">
+            <nav class="fixed-section">
+              <h5>Settings</h5>
+              <ul>
+                <li>
+                  <a href="{{ url_for('settings_profile')}}" class="text-black nav-link">Profile</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('settings_password')}}" class="text-black nav-link">Password</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('settings_about')}}" class="text-black nav-link">About</a>
+                </li>
+                <hr>
+                <li>
+                    <a href="{{ url_for('logout') }}" class="text-black nav-link">Logout</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+          <div class="col col-lg-8 col-md-12">
+            <div class="settings-content">
+                {% block settings_content %}{% endblock %}
+            </div>
+      
+          </div>
+        </div>
+  </section>
+{% endblock %}

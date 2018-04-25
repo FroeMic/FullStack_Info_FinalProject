@@ -1,0 +1,40 @@
+{% extends "base_root.html" %}
+
+{% block navlinks %}
+  {{ super() }}
+{% endblock %}
+
+{% block main_body %}
+    <!-- Flash Messages -->
+    <div class="container"> 
+        {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        {% if category == 'info' or category == 'message' %}
+            <div class="alert alert-info" role="alert">
+        {% endif %}
+        {% if category == 'error' %}
+            <div class="alert alert-danger" role="alert">
+        {% endif %}
+            <div class="container">
+                <div class="alert-icon">
+                <i class="now-ui-icons travel_info"></i>
+                </div>
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">
+                    <i class="now-ui-icons ui-1_simple-remove"></i>
+                </span>
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+{% endblock %}

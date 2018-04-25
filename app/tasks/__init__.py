@@ -1,0 +1,2 @@
+from .SyncBooksWithGoodReadsJob import SyncBooksWithGoodReadsJob
+from .SyncBooksWithAmazonJob import SyncBooksWithAmazonJob

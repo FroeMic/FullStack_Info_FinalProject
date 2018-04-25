@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block navlinks %}
+  {{ super() }}
+{% endblock %}
+
+{% block content %}
+<div id="search-view">
+    <h4>Books that will help you with <em>{{selected_moods | join(", ")}}</em> </h4>
+    <div class="refine-query-container">
+        <div class="dropdown">
+            <a href="#" class="btn btn-simple text-dark dropdown-toggle" data-toggle="dropdown" id="filterDropdownRefine">
+                <i class="now-ui-icons ui-1_zoom-bold"></i>
+                Refine Situation
+            </a>
+            <div class="dropdown-menu" aria-labelledby="filterDropdownRefine">
+                {% for mood in selected_moods %}
+                    <div class="checkbox dropdown-item refine-query-item mood-item">
+                        <input id="checkbox-{{mood}}" type="checkbox" checked="">
+                        <label for="checkbox-{{mood}}" title="{{mood}}">
+                            {{ mood }}
+                        </label>
+                    </div>
+                {% endfor %}
+                <div class="dropdown-divider"></div>
+                {% for mood in unqueried_moods %}
+                    <div class="checkbox dropdown-item refine-query-item mood-item">
+                        <input id="checkbox-{{mood}}" type="checkbox">
+                        <label for="checkbox-{{mood}}" title="{{mood.title}}">
+                            {{ mood.title }}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <a href="#" class="btn btn-simple text-dark dropdown-toggle" data-toggle="dropdown" id="filterDropdownGenres">
+                <i class="now-ui-icons education_glasses"></i>
+                Genres
+            </a>
+            <div class="dropdown-menu" aria-labelledby="filterDropdownGenres">
+                {% for genre in selected_genres %}
+                    <div class="checkbox dropdown-item refine-query-item genre-item">
+                        <input id="checkbox-{{genre}}" type="checkbox" checked="">
+                        <label for="checkbox-{{genre}}" title="{{genre.title}}">
+                            {{ genre.title }}
+                        </label>
+                    </div>
+                {% endfor %}
+                {% if selected_genres|length == 0 %}
+                    <div class="checkbox dropdown-item refine-query-item genre-item">
+                        <input id="checkbox-all" type="checkbox" checked="">
+                        <label class="ignore" for="checkbox-all" title="">
+                            all
+                        </label>
+                    </div>
+                {% endif %}
+                <div class="dropdown-divider"></div>
+                {% for genre in unqueried_genres %}
+                    <div class="checkbox dropdown-item refine-query-item genre-item">
+                        <input id="checkbox-{{genre}}" type="checkbox">
+                        <label for="checkbox-{{genre}}" title="{{genre.title}}">
+                            {{ genre.title }}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <a href="#" class="btn btn-simple text-dark dropdown-toggle" data-toggle="dropdown" id="filterDropdownSort">
+                <i class="now-ui-icons arrows-1_minimal-down"></i>
+                <i class="now-ui-icons arrows-1_minimal-up"></i>
+                Sort
+            </a>
+            <div class="dropdown-menu" aria-labelledby="filterDropdownSort">
+                <div class="radio dropdown-item refine-query-item sort-item">
+                    {% if sort_order == "score" %}
+                        <input type="radio" name="sort-score" id="sort-score" value="score" checked="">
+                    {% else %}
+                        <input type="radio" name="sort-score" id="sort-score" value="score" >
+                    {% endif %}
+                    <label for="sort-score">
+                        Sort by Match
+                    </label>
+                </div>
+                <div class="radio dropdown-item refine-query-item sort-item">
+                    {% if sort_order == "rating" %}
+                        <input type="radio" name="sort-rating" id="sort-rating" value="rating" checked="">
+                    {% else %}
+                        <input type="radio" name="sort-rating" id="sort-rating" value="rating">
+                    {% endif %}                   
+                    <label for="sort-rating">
+                        Sort by Rating
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="loading-view">
+            <div class="container text-center">
+                <i class="now-ui-icons loader_refresh spin"></i>
+                <h4>Loading ...</h4>
+            </div>
+        </div>
+        {% if results|length == 0 %}
+            <div class="container text-center">
+                <img style="width:50%; max-width:300px;" src="{{url_for('static',filename='_assets/img/chip-head.svg') }}" alt="">
+                <h5>
+                    We couldn't find any books matching your description.
+                    Refine your search to find matching results!
+                </h5>
+            </div>
+        {% endif %}
+        {% for result in results %}
+            <div class="col col-xs-6 col-sm-4 col-lg-2 search-result">
+                <div class="img-container">
+                    <a href="{{ url_for('show_book', book_id=result.book.id)}}">
+                    <img class="hover-zoom" src="{{result.book.cover_image_url}}" alt="">
+                    </a>
+                    <div class="img-overlay">
+                        <!-- We could put something over the image here -->
+                    </div>
+                </div>
+                <div class="score text-success">
+                    Match: {{result.score * 100}} %
+                </div>
+
+                <div class="rating">
+                    {{result.book.rating}}
+                    {% for star in rating_to_stars(result.book.rating) %}
+                    <span>{{star}}</span>
+                    {% endfor %}
+                </div>
+
+                <a href="{{ url_for('show_book', book_id=result.book.id)}}" class="book-title">
+                    {{result.book.title}}
+                </a>
+
+                <div class="author">
+                    by {{result.book.author}}
+                </div>
+    
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
