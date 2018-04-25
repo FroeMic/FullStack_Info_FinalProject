@@ -161,10 +161,10 @@ def settings_profile():
 
     return render_template('settings_profile.html', title='Settings', form=form)
 
-@app.route('/settings/preferences')
+@app.route('/settings/about')
 @login_required
-def settings_preferences():
-    return render_template('settings_preferences.html', title='Settings')
+def settings_about():
+    return render_template('settings_about.html', title='About')
 
 @app.route('/settings/password', methods=['GET', 'POST'])
 @login_required
