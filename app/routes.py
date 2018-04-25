@@ -3,7 +3,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 
 from app import app, db
 from app.forms import RegistrationForm, LoginForm, SettingsForm, PasswordForm
-from app.models import User, Book, Mood, Genre, SearchQuery, Bookmark
+from app.models import User, Book, Mood, Genre, SearchQuery, Bookmark, BookGenre
 from app.utils import dict_to_object, rating_to_stars, ListConverter
 
 # helpers
@@ -14,6 +14,7 @@ app.url_map.converters['list'] = ListConverter
 # =========================
 @app.errorhandler(Exception)
 def unhandled_exception(e):
+    print(e)
     return render_template('error_page.html', 
         error_code=500, 
         error_title="Looks like our librarian got lost looking for your book! ", 
@@ -47,7 +48,7 @@ def index():
 def search(moods, genres):    
     _moods = Mood.query.filter(Mood.title.in_(moods)).all()
     order = request.args.get('order') if request.args.get('order') else 'score'
-    print(order)
+
     if len(_moods) == 0:
         flash('Oooops! Looks like you we received an empty query.', 'error')
         redirect(url_for('index'))
@@ -59,6 +60,11 @@ def search(moods, genres):
 
     query = SearchQuery(_moods, genres=_genres, order_by=order)
     results = query.get_results()
+
+    # only show genres to the user that would result in at least 1 book
+    book_ids = [result.book.id for result in results]
+    allowed_genre_ids = [bg.genre_id for bg in BookGenre.query.filter(BookGenre.book_id.in_(book_ids)).all()]
+    _unqueried_genres = [genre for genre in  _unqueried_genres if genre.id in allowed_genre_ids]
 
     return render_template('search.html', 
         results=results, 
