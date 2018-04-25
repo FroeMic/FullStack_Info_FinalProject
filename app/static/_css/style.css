@@ -104,6 +104,10 @@ body>.navbar + * {
     width: calc(100% - 30px) !important;
 }
 
+#input-search {
+    border: 1px white solid;
+}
+
 #autoCompleteContainer .autocomplete-suggestion {
     cursor: pointer;
     text-transform: capitalize;
