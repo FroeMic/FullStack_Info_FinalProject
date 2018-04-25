@@ -139,10 +139,6 @@ def delete_bookmark(book_id):
     
     redirect_url = url_for('mybooks')
     split_path = referrer.split('/')
-    print(referrer)
-    print(split_path)
-    print(len(split_path))
-    print(split_path[-2])
     if len(split_path) >= 2 and split_path[-2] == 'book':
         redirect_url = url_for('show_book', book_id=int(split_path[-1]))
 
