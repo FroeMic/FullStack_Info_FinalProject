@@ -15,7 +15,10 @@ app.url_map.converters['list'] = ListConverter
 
 @app.route('/')
 def index():
-    return render_template('index.html', title='Literapy')
+    random_books = Book.get_random()
+    for book in random_books:
+        print(len(book.moods))
+    return render_template('index.html', title='Literapy', explore_books=random_books)
 
 @app.route('/search/<list:moods>', defaults={'genres': []})
 @app.route('/search/<list:moods>/<list:genres>')

@@ -13,7 +13,6 @@ def get_scheduler():
     return _scheduler
 
 ''' Facade to expose the JobQueue '''
-
 def create_queue(path, table = 'queue', max_workers = 5):
     ''' Returns a ready-to-use queue '''
     queue = Queue(path, table = table, max_workers = max_workers)

@@ -117,6 +117,63 @@ body>.navbar + * {
     background-color: #e6f7f6;
 }
 
+.landing-page .explore-book-container {
+    margin-bottom: 40px;
+}
+
+.landing-page .explore-book-container .img-container {
+    position: relative;
+    max-height: 150px;
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 5px;
+    border-radius: .2rem;
+}
+
+.landing-page .explore-book-container .img-container img {
+    width: 100%;
+}
+
+.landing-page .explore-book-container  .book-title {
+    font-weight: 500;
+    font-size: 12pt;
+    color: black;
+}
+
+.landing-page .explore-book-container .book-title:hover {
+    text-decoration: unset;
+}
+
+.landing-page .explore-book-container .author {
+    font-weight: 400;
+}
+
+.landing-page .explore-book-container .img-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.landing-page .explore-book-container .mood-container{
+    margin-top: 10px;
+}
+
+.landing-page .explore-book-container .row {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display:         flex;
+    flex-wrap: wrap;
+  }
+
+.landing-page .explore-book-container .row > [class*='col-'] {
+    display: flex;
+    flex-direction: column;
+}
+
 /* SEARCH PAGE */
 #search-view .refine-query-container {
     margin: 20px 0;
@@ -222,6 +279,7 @@ body>.navbar + * {
     height: 100%;
     pointer-events: none;
 }
+
 #search-view .search-result .score {
     font-weight: 500;
 }
@@ -303,7 +361,6 @@ body>.navbar + * {
     -webkit-transform: scale(1.08);
      transform: scale(1.08)
  }
-
 
 #description-card {
     font-size: 10pt;

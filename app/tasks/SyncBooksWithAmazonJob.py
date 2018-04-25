@@ -26,7 +26,7 @@ class SyncBooksWithAmazonJob(Job):
                 pass
 
     def _schedule_next_run(self):
-        today = datetime.today()
+        today = datetime.utcnow()
         tomorrow = today + timedelta(days=1)
         tomorrow_2_am = datetime(tomorrow.year, tomorrow.month, tomorrow.day, hour = 2, tzinfo = None )
 

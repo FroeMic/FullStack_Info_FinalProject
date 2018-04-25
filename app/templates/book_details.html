@@ -21,18 +21,21 @@
                             <div class="info col-12">
                                 <div class="mood-container">
                                     <h6>Helps with:</h6>
-                                    {% for mood in book.moods%}
+                                    {% for mood in book.moods %}
                                         <a href="/search/{{mood.title}}">
-                                            <span class="badge badge-default">{{ mood.title }}</span>
+                                            <span class="badge badge-primary">{{ mood.title }}</span>
                                         </a>
                                     {% endfor %}
                                 </div>
                             </div>
                             <div class="info col-12">
-                                {% if book.amazon_url %}
-                                    <a href="{{ book.amazon_url }}" class="btn btn-primary">Get This Book</a>
-                                {% endif %}
-                            </div>             
+                                <div class="genre-container">
+                                    <h6>Helps with:</h6>
+                                    {% for genre in book.genres %}
+                                        <span class="badge badge-default">{{ genre.title }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>            
                         </div>
                     </div>
                     <div class="col-8">
@@ -65,7 +68,12 @@
                                         <span>{{star}}</span>
                                         {% endfor %}
                                     </p>
-                                        <p class="card-text">{{book.description|safe}}</p>
+                                     <p class="card-text">
+                                         {{book.description|safe}}
+                                    </p>
+                                    {% if book.amazon_url %}
+                                        <a href="{{ book.amazon_url }}" class="btn btn-primary">Get This Book</a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
