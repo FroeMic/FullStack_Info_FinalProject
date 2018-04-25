@@ -104,6 +104,10 @@ body>.navbar + * {
     width: calc(100% - 30px) !important;
 }
 
+#input-search {
+    border: 1px white solid;
+}
+
 #autoCompleteContainer .autocomplete-suggestion {
     cursor: pointer;
     text-transform: capitalize;
@@ -115,6 +119,67 @@ body>.navbar + * {
 
 #autoCompleteContainer .autocomplete-suggestion.selected {
     background-color: #e6f7f6;
+}
+
+.landing-page .explore-book-container {
+    margin-bottom: 40px;
+}
+
+.landing-page .explore-book-container .img-container {
+    position: relative;
+    max-height: 150px;
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 5px;
+    border-radius: .2rem;
+}
+
+.landing-page .explore-book-container .img-container img {
+    width: 100%;
+}
+
+.landing-page .explore-book-container  .book-title {
+    font-weight: 500;
+    font-size: 12pt;
+    color: black;
+}
+
+.landing-page .explore-book-container .book-title:hover {
+    text-decoration: unset;
+}
+
+.landing-page .explore-book-container .author {
+    font-weight: 400;
+}
+
+.landing-page .explore-book-container .img-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.landing-page .explore-book-container .mood-container{
+    margin-top: 10px;
+}
+
+.landing-page .explore-book-container .row {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display:         flex;
+    flex-wrap: wrap;
+  }
+
+.landing-page .explore-book-container .row > [class*='col-'] {
+    display: flex;
+    flex-direction: column;
+}
+
+.landing-page .learn-more {
+    margin-top: 50px;
 }
 
 /* SEARCH PAGE */
@@ -222,6 +287,7 @@ body>.navbar + * {
     height: 100%;
     pointer-events: none;
 }
+
 #search-view .search-result .score {
     font-weight: 500;
 }
@@ -272,6 +338,27 @@ body>.navbar + * {
     display: unset;
 }
 
+/* BOOK DETAIL VIEW */
+#book-detail-view #booktitle {
+    padding: 0;
+}
+
+#book-detail-view .disclaimer {
+    height: 10pt;
+    color: rgba(0,0,0, 0.4);
+    margin-top: 40px;
+    font-style: italic;
+}
+
+#book-detail-view .mood-container{
+    padding: 10px 0;
+}
+
+#book-detail-view .disclaimer img {
+    opacity: 0.75;
+    height: 100%;
+}
+
 .hover-zoom {
     -moz-transition:all 0.4s;
     -webkit-transition:all 0.4s;
@@ -282,8 +369,6 @@ body>.navbar + * {
     -webkit-transform: scale(1.08);
      transform: scale(1.08)
  }
-
-/* HOW IT WORKS */
 
 #description-card {
     font-size: 10pt;
@@ -301,7 +386,7 @@ body>.navbar + * {
     padding-bottom: 45px;
 }
 
-hr {
+.landing-page hr {
   max-width: 80px;
   border-width: 3px;
   border-color: #F05F40;
@@ -341,10 +426,6 @@ blockquote cite {
     font-size: 14px;
     display: block;
     margin-top: 5px;
-}
- 
-blockquote cite:before {
-    content: "\2014 \2009";
 }
 
 
@@ -420,6 +501,10 @@ blockquote cite:before {
     padding: 0;
 }
 
+.fixed-section ul {
+    margin-left: 0;
+}
+
 .fixed-section ul li {
     list-style: none;
 }
@@ -436,6 +521,83 @@ blockquote cite:before {
 .fixed-section,
 .settings-content {
     padding-top: 30px;
+}
+
+.settings-about ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+/* ERROR PAGE */
+
+#error-page {
+    margin-top: 15%;
+}
+
+#error-page .error-code {
+    font-size: 128pt;
+    font-weight: 700;
+}
+
+#error-page .error-title {
+    font-size: 16pt;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+#error-page .error-message {
+    font-size: 16;
+    margin-bottom: 20px;
+}
+
+#error-page img {
+    width: 60%;
+    margin: 20%;
+}
+
+/* --------------------------------
+
+Nucleo Outline Web Font - nucleoapp.com/
+License - nucleoapp.com/license/
+Created using IcoMoon - icomoon.io
+
+-------------------------------- */
+@font-face {
+  font-family: 'myicons';
+  src: url("/static/_fonts/myicons.eot");
+  src: url("/static/_fonts/myicons.eot") format("embedded-opentype"), url("/static/_fonts/myicons.woff2") format("woff2"), url("/static/_fonts/myicons.woff") format("woff"), url("/static/_fonts/myicons.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal; }
+/*------------------------
+    base class definition
+-------------------------*/
+.nc-icon {
+  display: inline-block;
+  font: normal normal normal 15px/1 'myicons';
+  font-size: inherit;
+  speak: none;
+  text-transform: none;
+  /* Better Font Rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+/*end transparent button*/
+
+/*------------------------
+  font icons
+-------------------------*/
+
+.nc-favourite-31-2::before {
+    content: "\ea01";
+}
+
+.nc-favourite-31::before {
+    content: "\ea02";
+}
+
+.btn-saved {
+  background-color: #f8888e;
+  color: #FFFFFF;
 }
 
 /* READING LIST */
@@ -459,7 +621,15 @@ blockquote cite:before {
 }
 
 /* BOOK DETAILS PAGE */
-.info img{
+.info img {
     width: 100%;
     height: auto;
 }
+
+/* DELETE BOOKMARK */
+
+.delete-form {
+    display: inline;
+    margin: 0;
+}
+

@@ -8,26 +8,83 @@
 
 {% block content %}
 
-<div class="row">
+<div class="row" id="book-detail-view">
     <div class="col-lg-10 ml-auto mr-auto">
         <div class="card">
             <div class="card-body">
                 <div class="row">
                     <div class="col-4">
-                        <div class="info">
-                            <img src="{{book.cover_image_url}}" class="rounded float-left">
+                        <div class="row">
+                            <div class="info col-12">
+                                <img src="{{book.cover_image_url}}" class="rounded float-left">
+                            </div>
+                            <div class="info col-12">
+                                <div class="mood-container">
+                                    <h6>Helps with:</h6>
+                                    {% for mood in book.moods %}
+                                        <a href="/search/{{mood.title}}">
+                                            <span class="badge badge-primary">{{ mood.title }}</span>
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="info col-12">
+                                <div class="genre-container">
+                                    <h6>Genres:</h6>
+                                    {% for genre in book.genres %}
+                                        <span class="badge badge-default">{{ genre.title }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>            
                         </div>
                     </div>
                     <div class="col-8">
-                        <h3 class="card-title">{{ book.title }}</h3>
-                        <h6>{{ book.author }}</h6>
-                        <p>{{book.rating}}
-                            {% for star in rating_to_stars(book.rating) %}
-                            <span>{{star}}</span>
-                            {% endfor %}
-                        </p>
-                        <p class="card-text">{{book.description|safe}}</p>
-                        <a href="{{book.amazon_url}}" target="_blank" class="btn btn-primary">Buy This Book</a>
+                        <div class="row">
+                            <div class="col" id="booktitle">
+                                <h3 class="card-title">{{ book.title }}</h3>
+                            </div>
+                            <div class="col-auto">
+                                {% if bookmarked %}
+                                    <form class="form delete-form" action="{{ url_for('delete_bookmark', book_id=book.id) }}" method="DELETE">
+                                        <button class="btn btn-neutral btn-sm" type="submit">
+                                            <i class="nc-icon nc-favourite-31"></i>
+                                            <span> Remove Bookmark</span>
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <a href="/bookmark/{{ book.id }}" class="btn btn-neutral btn-sm">
+                                        <i class="nc-icon nc-favourite-31-2"></i> 
+                                        <span> Save for Later</span>
+                                    </a>
+                                {% endif %}
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <a href="{{book.goodreads_author_url}}" target="_blank">
+                                        <h6>{{ book.author }}</h6>
+                                    </a>
+                                    <p>{{book.rating}}
+                                        {% for star in rating_to_stars(book.rating) %}
+                                        <span>{{star}}</span>
+                                        {% endfor %}
+                                    </p>
+                                     <p class="card-text">
+                                         {{book.description|safe}}
+                                    </p>
+                                    {% if book.amazon_url %}
+                                        <a href="{{ book.amazon_url }}" class="btn btn-primary">Get This Book</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row disclaimer text-center">
+                    <div class="col-12">
+                        Book information (title, description, author, rating) provided by 
+                        <a href="{{book.goodreads_url}}"  target="_blank">
+                            <img src="{{url_for('static', filename='_assets/img/goodreads_logo.jpg')}}" alt="goodreads.com">
+                        </a>
                     </div>
                 </div>
             </div>

@@ -1,5 +1,6 @@
 from app import db
 from datetime import datetime
+from sqlalchemy.sql.expression import func
 
 class Book(db.Model):
     
@@ -18,6 +19,12 @@ class Book(db.Model):
         self.amazon_url = dict['amazon_url']
         self.created_at = dict['created_at']
         self.updated_at = dict['updated_at']
+
+    @staticmethod
+    def get_random(n=10):
+        book_ids = [book.id for book in Book.query.order_by(func.random()).limit(n).all()]
+        print(book_ids)
+        return Book.query.filter(Book.id.in_(book_ids))
 
     id = db.Column(db.Integer, primary_key=True)
     isbn = db.Column(db.String(128), index=True, nullable=False, unique=True)

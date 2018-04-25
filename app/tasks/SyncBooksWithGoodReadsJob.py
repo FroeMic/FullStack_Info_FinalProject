@@ -22,7 +22,7 @@ class SyncBooksWithGoodReadsJob(Job):
             self._sync_book_with_goodreads(book)
 
     def _schedule_next_run(self):
-        today = datetime.today()
+        today = datetime.utcnow()
         tomorrow = today + timedelta(days=1)
         tomorrow_1_am = datetime(tomorrow.year, tomorrow.month, tomorrow.day, hour = 1, tzinfo = None )
 
@@ -43,13 +43,18 @@ class SyncBooksWithGoodReadsJob(Job):
 
         # make sure all genres exit in our database bevor adding them to the book
         genres = []
+        genre_title_blacklist = ['book', 'read', 'shelf', 'own']
         for genre_title in decoded_book_data['genres']:
-            genre = Genre.query.filter_by(title=genre_title).first()
-            if genre is None:
-                genre = Genre(genre_title)
-                db.session.add(genre)
-                db.session.commit()
-            genres.append(genre)
+            is_blacklisted = False
+            for blacklisted_title in genre_title_blacklist:
+                is_blacklisted = is_blacklisted or (blacklisted_title in genre_title.lower())
+            if not is_blacklisted:
+                genre = Genre.query.filter_by(title=genre_title).first()
+                if genre is None:
+                    genre = Genre(genre_title)
+                    db.session.add(genre)
+                    db.session.commit()
+                genres.append(genre)
         
         book.title = decoded_book_data['title']
         book.author = decoded_book_data['author']

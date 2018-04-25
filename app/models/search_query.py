@@ -59,6 +59,7 @@ class SearchQuery(object):
             'FROM {} bm, {} b'.format(BookMood.__table__, Book.__table__),
             'WHERE bm.mood_id in ({})'.format(self._get_mood_query_string()),
             'AND bm.book_id = b.id',
+            'AND b.title IS NOT NULL',
             'GROUP BY b.id, b.isbn, b.isbn13, b.title, b.author, b.price, b.rating, b.description, b.cover_image_url, b.goodreads_url, b.goodreads_author_url, b.amazon_url, b.created_at, b.updated_at',
             'HAVING total_score > {}'.format(self.min_score),
             'ORDER BY {}'.format(order_by),

@@ -20,6 +20,7 @@ function setup() {
 	markActiveLinks();
 	setupLandingPage();
 	setupSearchPage();
+	setupDelete();
 }
 
 /**
@@ -428,4 +429,28 @@ function encodeQueryData(data) {
 	return ret.join('&');
 }
 
+/**
+ * Delete Bookmark
+ */
 
+function setupDelete() {
+    $('.delete-form').on('submit', submitDeleteRequest);
+}
+
+function submitDeleteRequest(e) {
+    e.preventDefault();
+	let endPoint = $(this).attr('action');
+	endPoint = endPoint + '?referrer=' + String(window.location);
+
+    $.ajax(endPoint, {
+        type: 'DELETE',
+        success: redirectOnSuccess
+    });
+
+}
+
+function redirectOnSuccess (response) {
+    if (response && response.redirect) {
+        window.location = response.redirect_url;
+    }
+}

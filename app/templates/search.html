@@ -107,7 +107,7 @@
         </div>
         {% if results|length == 0 %}
             <div class="container text-center">
-                <img style="width:50%;" src="{{url_for('static',filename='_assets/img/chip-head.svg') }}" alt="">
+                <img style="width:50%; max-width:300px;" src="{{url_for('static',filename='_assets/img/chip-head.svg') }}" alt="">
                 <h5>
                     We couldn't find any books matching your description.
                     Refine your search to find matching results!
@@ -148,9 +148,4 @@
     </div>
 </div>
 
-
 {% endblock %}
-
-
-
-

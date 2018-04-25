@@ -9,51 +9,37 @@
 <div class="container">
 	<div id="readinglist">
 		<div class="col-lg-10 ml-auto mr-auto">
-			<h2 class="title text-black">Your Book List</h2>
-			<div class ="row">
-				<div class ="col-2">
-					<div class="img-container">
-						<img class="rounded float-left" src="https://images-na.ssl-images-amazon.com/images/I/51HTxer-rdL._SY346_.jpg" alt="" />
-					</div>
-				</div>
-				<div class="col-10">
-					<h4>The Hundred Year Flood</h4>
-					<p>Matthew Salesses</p>
-					<p>3.3 ★ ★ ★ ☆ ☆</p>
-					<a class="btn btn-primary" href="#">See Book Details</a>
-					<a class="btn btn-primary" href="#">Remove from List</a>
-				</div>
-			</div>
+			<h2 class="title text-black">Saved Books</h2>
 
-			<div class ="row">
-				<div class ="col-2">
-					<div class="img-container">
-						<img class="rounded float-left" src="https://images-na.ssl-images-amazon.com/images/I/61O-ltKJb9L._SX330_BO1,204,203,200_.jpg" alt="" />
-					</div>
-				</div>
-				<div class="col-10">
-					<h4>One Hundred Years of Solitude</h4>
-					<p>Gabriel Garcia Marquez</p>
-					<p>4.0 ★ ★ ★ ★ ☆</p>
-					<a class="btn btn-primary" href="#">See Book Details</a>
-					<a class="btn btn-primary" href="#">Remove from List</a>
-				</div>
-			</div>
+			{% if bookmarks|length == 0 %}
+            <p>You don't have any books saved yet!</p>
+            {% endif %}
 
+			{% for bookmark in bookmarks %}
 			<div class ="row">
 				<div class ="col-2">
 					<div class="img-container">
-						<img class="rounded float-left" src="https://images-na.ssl-images-amazon.com/images/I/51Z0nLAfLmL._SY346_.jpg" alt="" />
+						<img class="rounded float-left" src="{{bookmark.book.cover_image_url}}" alt="" />
 					</div>
 				</div>
 				<div class="col-10">
-					<h4>The Alchemist</h4>
-					<p>Paulo Coelho</p>
-					<p>4.5 ★ ★ ★ ★ ☆</p>
-					<a class="btn btn-primary" href="#">See Book Details</a>
-					<a class="btn btn-primary" href="#">Remove from List</a>
+					<h4>{{bookmark.book.title}}</h4>
+					<p>by {{bookmark.book.author}}</p>
+                    <p>{{bookmark.book.rating}}
+                        {% for star in rating_to_stars(bookmark.book.rating) %}
+                        <span>{{star}}</span>
+                        {% endfor %}
+                    </p>
+					<a href="{{ url_for('show_book', book_id=bookmark.book.id)}}"><button class="btn btn-primary">See Book Details</button></a>
+					<form class="form delete-form" action="{{ url_for('delete_bookmark', book_id=bookmark.book.id) }}" method="DELETE">
+						<button class="btn btn-neutral" type="submit">
+							<i class="now-ui-icons nc-icon nc-favourite-31"></i> 
+							Remove Bookmark
+						</button>
+                    </form>
 				</div>
 			</div>
+			{% endfor %}
 		</div>
 	</div>
 </div>

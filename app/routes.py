@@ -1,13 +1,37 @@
-from flask import render_template, redirect, url_for, flash, jsonify, request
+from flask import render_template, redirect, url_for, flash, jsonify, request, abort
 from flask_login import current_user, login_user, logout_user, login_required
 
 from app import app, db
 from app.forms import RegistrationForm, LoginForm, SettingsForm, PasswordForm
-from app.models import User, Book, Mood, Genre, SearchQuery
+from app.models import User, Book, Mood, Genre, SearchQuery, Bookmark
 from app.utils import dict_to_object, rating_to_stars, ListConverter
 
 # helpers
 app.url_map.converters['list'] = ListConverter
+
+# =========================
+# Error Handlers 
+# =========================
+@app.errorhandler(Exception)
+def unhandled_exception(e):
+    return render_template('error_page.html', 
+        error_code=500, 
+        error_title="Looks like our librarian got lost looking for your book! ", 
+        error_message="We encountered an internal server error and could not complete your request."), 500
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    return render_template('error_page.html', 
+        error_code=500, 
+        error_title="Looks like our librarian got lost looking for your book! ", 
+        error_message="We encountered an internal server error and could not complete your request."), 500
+
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('error_page.html', 
+        error_code=404, 
+        error_title="Looks like our book is missing a page!", 
+        error_message="The page you are looking for could not be found."), 404
 
 # =========================
 # Anonymously Accessible 
@@ -15,7 +39,8 @@ app.url_map.converters['list'] = ListConverter
 
 @app.route('/')
 def index():
-    return render_template('index.html', title='Literapy')
+    random_books = Book.get_random()
+    return render_template('index.html', title='Literapy', explore_books=random_books)
 
 @app.route('/search/<list:moods>', defaults={'genres': []})
 @app.route('/search/<list:moods>/<list:genres>')
@@ -47,9 +72,16 @@ def search(moods, genres):
 @app.route('/book/<book_id>')
 def show_book(book_id):
     book = Book.query.get(int(book_id))
+
+    bookmarked = False
+    if not current_user.is_anonymous:
+        check_bookmark  = Bookmark.query.filter_by(book_id=book_id, user_id=current_user.id).first()
+        bookmarked = check_bookmark is not None
+
     if book is None:
         abort(404)
-    return render_template('book_details.html', book=book, rating_to_stars=rating_to_stars, title=book.title)
+
+    return render_template('book_details.html', book=book, rating_to_stars=rating_to_stars, title=book.title, bookmarked=bookmarked)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -87,10 +119,46 @@ def logout():
 # =========================
 # 2. Login Required
 # # =========================
+@app.route('/bookmark/<book_id>', methods=['GET'])
+@login_required
+def bookmark(book_id):
+    if Bookmark.query.filter_by(user_id=current_user.get_id(), book_id=int(book_id)).first() is None:
+        bookmark = Bookmark(user_id=current_user.get_id(), book_id=int(book_id))
+        db.session.add(bookmark)
+        db.session.commit()
+
+    return redirect(url_for('show_book', book_id=book_id))
+
+@app.route('/bookmark/<book_id>', methods=['DELETE'])
+@login_required
+def delete_bookmark(book_id):
+    bookmark = Bookmark.query.filter_by(user_id=current_user.get_id(), book_id=int(book_id)).first()
+
+    referrer = request.args.get('referrer')
+    referrer = referrer if referrer else url_for('mybooks')
+    
+    redirect_url = url_for('mybooks')
+    split_path = referrer.split('/')
+    print(referrer)
+    print(split_path)
+    print(len(split_path))
+    print(split_path[-2])
+    if len(split_path) >= 2 and split_path[-2] == 'book':
+        redirect_url = url_for('show_book', book_id=int(split_path[-1]))
+
+    if bookmark is not None:
+        db.session.delete(bookmark)
+        db.session.commit()
+    return jsonify(
+        redirect=True,
+        redirect_url=redirect_url
+    )
+
 @app.route('/mybooks')
 @login_required
 def mybooks():
-    return render_template('reading_list.html')
+    bookmarks = Bookmark.query.all()
+    return render_template('reading_list.html', bookmarks=bookmarks, rating_to_stars=rating_to_stars)
 
 @app.route('/settings')
 @login_required
@@ -115,10 +183,10 @@ def settings_profile():
 
     return render_template('settings_profile.html', title='Settings', form=form)
 
-@app.route('/settings/preferences')
+@app.route('/settings/about')
 @login_required
-def settings_preferences():
-    return render_template('settings_preferences.html', title='Settings')
+def settings_about():
+    return render_template('settings_about.html', title='About')
 
 @app.route('/settings/password', methods=['GET', 'POST'])
 @login_required
