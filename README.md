@@ -1,5 +1,5 @@
 # FullStack_Info_FinalProject
-Final Project for InfoC265 at UC Berkeley in Spring 2018
+Final Project for INFo 290T Full-Stack Web Development at UC Berkeley in Spring 2018
 
 ## How to Contribute
 
